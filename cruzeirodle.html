@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cruzeirodle — Adivinhe o Jogador do Cruzeiro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
+  :root{
+    --azul:#0d3a94; --azul-esc:#081f4f; --azul-vivo:#2f6fed; --azul-claro:#7ec8ff;
+    --branco:#ffffff; --dourado:#f4c430; --verde:#1f9d55; --verde-esc:#16793f;
+    --amarelo:#e0a800; --vermelho:#c62828; --cinza:#5a6a94;
+    --sombra: 0 10px 30px rgba(7,29,77,.25); --radius: 16px;
+    --font-display: 'Oswald', 'Segoe UI', Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh; font-family:'Segoe UI', Roboto, Arial, sans-serif; position:relative;
+    background: radial-gradient(1200px 600px at 50% -10%, #2b57d6 0%, var(--azul) 45%, var(--azul-esc) 100%);
+    color:var(--branco); display:flex; justify-content:center; padding:20px 14px 60px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1.6px 1.6px at 8% 12%, rgba(255,255,255,.55) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 22% 38%, rgba(255,255,255,.4) 50%, transparent 52%),
+      radial-gradient(1.8px 1.8px at 36% 8%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.2px 1.2px at 52% 28%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.6px 1.6px at 68% 14%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 79% 42%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.8px 1.8px at 91% 20%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 14% 66%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.6px 1.6px at 61% 72%, rgba(255,255,255,.4) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 85% 78%, rgba(255,255,255,.35) 50%, transparent 52%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 2px, transparent 2px, transparent 26px);
+    background-repeat: repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat;
+    background-size: 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, auto;
+  }
+  #app{width:100%;max-width:640px;position:relative;z-index:1;}
+  header.top{text-align:center;margin-bottom:18px;}
+  .badge{width:64px;height:64px;margin:0 auto 8px;display:block;filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));}
+  .badge .star{fill:#ffffff;}
+  h1.title{font-family:var(--font-display);text-transform:uppercase;font-size:1.9em;margin:4px 0 2px;letter-spacing:1.5px;text-shadow:0 3px 10px rgba(0,0,0,.35);}
+  h1.title span{color:var(--dourado);}
+  .subtitle{color:#cdd8ff;font-size:.92em;margin:0 0 6px;}
+  .backlink{display:inline-block;margin-top:6px;font-size:.8em;color:#cdd8ff;text-decoration:none;border-bottom:1px dotted rgba(205,216,255,.5);}
+  .backlink:hover{color:#fff;}
+  .card{
+    background: rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius: var(--radius);
+    padding:18px;margin-bottom:16px;box-shadow: var(--sombra);backdrop-filter: blur(6px);position:relative;z-index:2;
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--font-display);letter-spacing:.4px;
+    background: linear-gradient(180deg, var(--dourado), #d9a600);color: var(--azul-esc);font-weight:700;
+    border:none;padding:12px 20px;border-radius: 999px;cursor:pointer;font-size:.95em;
+    box-shadow: 0 6px 16px rgba(0,0,0,.25);transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.3);}
+  .btn:active{transform:translateY(0);}
+  .btn.secondary{background: rgba(255,255,255,.12);color:var(--branco);border:1px solid rgba(255,255,255,.35);}
+  .btn.ghost{background:transparent;color:#cdd8ff;border:1px solid rgba(255,255,255,.3);padding:9px 16px;font-weight:600;font-size:.85em;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;}
+
+  .mode-row{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+  .mode-btn{font-family:var(--font-display);letter-spacing:.3px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#cdd8ff;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:.82em;font-weight:600;}
+  .mode-btn.active{background:var(--dourado);color:var(--azul-esc);border-color:var(--dourado);}
+
+  .stats-bar{display:flex;justify-content:center;gap:18px;margin-bottom:14px;text-align:center;flex-wrap:wrap;}
+  .stats-bar div{display:flex;flex-direction:column;}
+  .stats-bar b{font-family:var(--font-display);font-size:1.3em;color:var(--dourado);}
+  .stats-bar span{font-size:.65em;color:#cdd8ff;text-transform:uppercase;letter-spacing:.3px;}
+
+  .guess-form{display:flex;gap:8px;margin-bottom:2px;}
+  .ac-wrap{position:relative;flex:1;min-width:0;}
+  .guess-form input{
+    width:100%;min-width:0;padding:12px 14px;border-radius:10px;border:2px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.95);color:var(--azul-esc);font-size:.95em;font-weight:600;font-family:'Segoe UI',Arial,sans-serif;
+  }
+  .guess-form input:focus{outline:none;border-color:var(--dourado);}
+  .ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border-radius:10px;
+    max-height:230px;overflow-y:auto;box-shadow:0 10px 26px rgba(0,0,0,.4);z-index:30;}
+  .ac-item{padding:11px 14px;color:var(--azul-esc);font-weight:600;cursor:pointer;font-size:.9em;border-bottom:1px solid rgba(0,0,0,.07);}
+  .ac-item:last-child{border-bottom:none;}
+  .ac-item:hover, .ac-item.active{background:#f0e6c8;}
+  .ac-empty{padding:11px 14px;color:#888;font-size:.85em;font-style:italic;}
+  .tries-label{text-align:center;font-size:.8em;color:#cdd8ff;margin:10px 0 12px;}
+  .guess-error{text-align:center;font-size:.85em;font-weight:700;color:#fff;background:rgba(198,40,40,.35);
+    border:1px solid rgba(255,150,150,.5);border-radius:8px;padding:0;margin:0;min-height:0;max-height:0;
+    overflow:hidden;opacity:0;transition:all .18s ease;}
+  .guess-error.show{padding:8px 12px;margin:8px 0;max-height:60px;opacity:1;}
+
+  .guesses-list{display:flex;flex-direction:column-reverse;gap:8px;}
+  .guess-row{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:5px;}
+  .guess-name{grid-column:1/-1;font-family:var(--font-display);font-weight:600;font-size:.95em;margin-bottom:2px;color:#fff;}
+  .g-cell{border-radius:8px;padding:6px 3px;text-align:center;font-size:.68em;font-weight:700;color:#fff;}
+  .g-cell .g-label{display:block;font-size:.72em;opacity:.85;text-transform:uppercase;letter-spacing:.2px;margin-bottom:2px;font-weight:600;}
+  .g-cell .g-val{font-family:var(--font-display);font-size:1.15em;}
+  .g-green{background:var(--verde-esc);border:1px solid rgba(255,255,255,.25);}
+  .g-yellow{background:#a9820f;border:1px solid rgba(255,255,255,.25);}
+  .g-gray{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);}
+  @media(max-width:420px){ .g-cell{padding:5px 2px;} .g-cell .g-val{font-size:1em;} .g-cell .g-label{font-size:.6em;} }
+
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:.72em;color:#cdd8ff;margin-top:14px;}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
+  .result-title{font-family:var(--font-display);text-transform:uppercase;font-size:1.6em;text-align:center;margin:4px 0 6px;letter-spacing:1px;}
+  .result-title.win{color:var(--dourado);}
+  .result-title.lose{color:#ff9d9d;}
+  .reveal-player{text-align:center;margin:10px 0;}
+  .reveal-player .rp-name{font-family:var(--font-display);font-weight:700;font-size:1.3em;color:#fff;}
+  .reveal-player .rp-sub{font-size:.82em;color:#cdd8ff;margin-top:2px;}
+  .reveal-squads{margin-top:12px;display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;}
+  .reveal-squads .rs-row{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:6px 10px;font-size:.8em;display:flex;justify-content:space-between;}
+  .reveal-squads .rs-row b{color:var(--dourado);}
+
+  .share-emoji-block{font-size:1.3em;line-height:1.3;text-align:center;margin:14px 0;letter-spacing:2px;}
+  .share-emoji-header{font-family:var(--font-display);font-size:.85em;color:#cdd8ff;text-align:center;margin-bottom:6px;letter-spacing:.5px;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dourado);color:var(--azul-esc);font-weight:700;font-family:var(--font-display);padding:10px 22px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.35);z-index:50;font-size:.85em;transition:opacity .3s ease, transform .3s ease;}
+
+  .how-to{font-size:.85em;color:#dde4ff;line-height:1.6;}
+  .how-to summary{cursor:pointer;font-family:var(--font-display);color:var(--dourado);font-weight:600;letter-spacing:.3px;text-transform:uppercase;font-size:.85em;}
+
+  footer{text-align:center;font-size:.72em;color:#a9b6e6;margin-top:20px;line-height:1.6;}
+  a.linklike{color:var(--azul-claro);text-decoration:none;}
+  .hidden{display:none !important;}
+  #share-card-host{position:fixed;left:-9999px;top:0;z-index:-1;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header class="top">
+    <svg class="badge" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <polygon id="star5" points="0,-1 0.2245,-0.309 0.9511,-0.309 0.3633,0.118 0.5878,0.809 0,0.382 -0.5878,0.809 -0.3633,0.118 -0.9511,-0.309 -0.2245,-0.309"/>
+      </defs>
+      <use href="#star5" class="star" transform="translate(50,14) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(17,48) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(79,42) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(50,86) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(49,47) scale(8)"/>
+    </svg>
+    <h1 class="title">CRUZEIRO<span>DLE</span></h1>
+    <p class="subtitle">Adivinhe o craque histórico do Cruzeiro em até 8 tentativas</p>
+    <a class="backlink" href="cruzeiro-dos-sonhos.html">◂ Jogar Cruzeiro dos Sonhos</a>
+    <a class="backlink" href="index.html" style="margin-left:14px;">🏠 Menu de jogos</a>
+  </header>
+
+  <section class="card">
+    <details class="how-to">
+      <summary>❓ Como jogar</summary>
+      <p style="margin-top:10px;">Todo dia tem um jogador-mistério novo, sorteado entre craques de toda a história do Cruzeiro (desde 1966 até hoje). Digite um nome e escolha da listinha de sugestões. A cada palpite você recebe pistas:</p>
+      <p><b>Posição:</b> verde = acertou a posição exata · amarelo = acertou o setor (defesa/meio/ataque) · cinza = setor diferente.<br>
+      <b>Overall e Títulos:</b> verde = acertou em cheio · uma seta (↑/↓) mostra se o jogador-mistério tem número maior/menor que o seu palpite.<br>
+      <b>Estreia:</b> ano real de estreia do jogador no Cruzeiro (pesquisado, não é o ano de um título) · verde = ano exato · amarelo = mesma década · cinza = década diferente. Como nem todo jogador da história do Cruzeiro tem essa informação documentada em fontes confiáveis, às vezes aparece "?" (não sabemos a estreia do seu palpite) ou um número com "¹" (sabemos a estreia do jogador que você chutou, mas não a do jogador-mistério, então não dá pra comparar).<br>
+      <b>Inicial:</b> verde se o nome do jogador-mistério começa com a mesma letra do seu palpite.</p>
+    </details>
+  </section>
+
+  <section class="card" id="game-card">
+    <div class="mode-row">
+      <button class="mode-btn" id="btn-mode-daily" onclick="switchMode('daily')">📅 Desafio do Dia #<span id="day-number">1</span></button>
+      <button class="mode-btn" id="btn-mode-random" onclick="switchMode('random')">🎲 Treino Aleatório</button>
+    </div>
+
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <form class="guess-form" id="guess-form" onsubmit="return handleGuessSubmit(event)" autocomplete="off">
+      <div class="ac-wrap">
+        <input type="text" id="guess-input" placeholder="Digite o nome de um jogador..." autocomplete="off" spellcheck="false">
+        <div class="ac-list hidden" id="ac-list"></div>
+      </div>
+      <button type="submit" class="btn">Chutar</button>
+    </form>
+    <div class="tries-label" id="tries-label"></div>
+    <div class="guess-error" id="guess-error"></div>
+
+    <div class="guesses-list" id="guesses-list"></div>
+
+    <div class="legend">
+      <span><i style="background:var(--verde-esc)"></i>Acertou</span>
+      <span><i style="background:#a9820f"></i>Perto</span>
+      <span><i style="background:rgba(255,255,255,.12)"></i>Longe</span>
+    </div>
+  </section>
+
+  <section class="card hidden" id="result-card">
+    <div class="result-title" id="result-title"></div>
+    <div class="reveal-player" id="reveal-player"></div>
+    <div class="reveal-squads" id="reveal-squads"></div>
+    <div class="share-emoji-header">Grade do desafio</div>
+    <div class="share-emoji-block" id="share-emoji-block"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="copyShareText()">📋 Copiar Resultado</button>
+      <button class="btn secondary" onclick="downloadShareCard()">📸 Baixar Card</button>
+      <button class="btn ghost" onclick="switchMode('random')">🎲 Jogar Treino</button>
+    </div>
+  </section>
+
+  <footer>
+    Jogo não-oficial, feito por torcedor. Parte do universo <a class="linklike" href="index.html">Cruzeiro dos Sonhos</a>.
+    Elencos baseados em fontes públicas (Wikipédia, Superesportes, Imortais do Futebol, CruzeiroPédia, Torcedores.com, Goal.com, O Tempo, Hoje em Dia, entre outras).
+    Os "overalls" (OVR) são estimativas do autor para fins de gameplay, não estatísticas oficiais.
+  </footer>
+
+</div>
+
+<div id="share-card-host" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const PLAYERS = 
+[{"nome":"Ademir","pos":"DM","ovr":83,"ano":1987,"titulos":4,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"},{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1987},{"nome":"Ademir Patrício","pos":"ST","ovr":77,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Adílson","pos":"CB","ovr":81,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1989},{"nome":"Adriano Chuva","pos":"RW","ovr":76,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Alessandro","pos":"ST","ovr":83,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Alessandro Cambalhota","pos":"ST","ovr":78,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Alex","pos":"AM","ovr":90,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2001},{"nome":"Alex Alves","pos":"ST","ovr":83,"ano":1998,"titulos":2,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":1998},{"nome":"Alex Mineiro","pos":"RW","ovr":81,"ano":1997,"titulos":2,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1997},{"nome":"Alisson","pos":"RW","ovr":79,"ano":2017,"titulos":1,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"}],"estreia":2012},{"nome":"Andrade","pos":"CM","ovr":77,"ano":1992,"titulos":1,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1992},{"nome":"André","pos":"GK","ovr":82,"ano":2000,"titulos":1,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":1999},{"nome":"Ariel Cabral","pos":"DM","ovr":80,"ano":2017,"titulos":3,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2015},{"nome":"Aristizábal","pos":"ST","ovr":85,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Arley Álvares","pos":"CB","ovr":76,"ano":1992,"titulos":1,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1992},{"nome":"Arrascaeta","pos":"AM","ovr":92,"ano":2017,"titulos":2,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2015},{"nome":"Artur","pos":"GK","ovr":81,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Balu","pos":"RB","ovr":80,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1986},{"nome":"Barcos","pos":"ST","ovr":85,"ano":2018,"titulos":1,"squads":[{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2018},{"nome":"Betinho","pos":"CM","ovr":81,"ano":1992,"titulos":1,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1988},{"nome":"Boiadeiro","pos":"CM","ovr":87,"ano":1991,"titulos":2,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1991},{"nome":"Borges","pos":"ST","ovr":84,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2012},{"nome":"Bosco","pos":"GK","ovr":80,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Bruno Rodrigo","pos":"CB","ovr":87,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Cacá","pos":"CB","ovr":77,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2018},{"nome":"Careca","pos":"AM","ovr":85,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Ceará","pos":"RB","ovr":80,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2012},{"nome":"Célio Gaúcho","pos":"RB","ovr":78,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1988},{"nome":"Célio Lúcio","pos":"CB","ovr":81,"ano":1992,"titulos":5,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"},{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1991},{"nome":"Charles","pos":"ST","ovr":87,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1991},{"nome":"Cléber","pos":"CB","ovr":81,"ano":2000,"titulos":1,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":2000},{"nome":"Cléber Monteiro","pos":"CB","ovr":80,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Cleisson","pos":"AM","ovr":81,"ano":1993,"titulos":3,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"},{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1992},{"nome":"Cris","pos":"CB","ovr":86,"ano":1998,"titulos":5,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":1998},{"nome":"Dagoberto","pos":"ST","ovr":82,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Darci Menezes","pos":"CB","ovr":84,"ano":1968,"titulos":2,"squads":[{"ano":1968,"titulo":"Campeonato Mineiro 1968"},{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1974},{"nome":"Darcy Menezes","pos":"CB","ovr":81,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1967},{"nome":"David","pos":"LW","ovr":77,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2018},{"nome":"Dedé","pos":"CB","ovr":89,"ano":2013,"titulos":4,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2013},{"nome":"Deivid","pos":"ST","ovr":82,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Dida","pos":"GK","ovr":92,"ano":1996,"titulos":3,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1994},{"nome":"Diego Souza","pos":"AM","ovr":82,"ano":2013,"titulos":1,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"}],"estreia":2013},{"nome":"Dinho","pos":"CM","ovr":76,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1988},{"nome":"Diogo Barbosa","pos":"LB","ovr":82,"ano":2017,"titulos":1,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"}],"estreia":2017},{"nome":"Dirceu Lopes","pos":"AM","ovr":95,"ano":1966,"titulos":3,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1964},{"nome":"Djair","pos":"DM","ovr":79,"ano":1998,"titulos":1,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1998},{"nome":"Dodô","pos":"LB","ovr":78,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Donizete Amorim","pos":"CM","ovr":79,"ano":1997,"titulos":1,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1997},{"nome":"Donizete Oliveira","pos":"DM","ovr":80,"ano":1997,"titulos":2,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":1996},{"nome":"Douglas","pos":"DM","ovr":84,"ano":1987,"titulos":2,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1987},{"nome":"Edenílson","pos":"LW","ovr":80,"ano":1993,"titulos":1,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1993},{"nome":"Éder Aleixo","pos":"AM","ovr":80,"ano":1993,"titulos":1,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1993},{"nome":"Edilson","pos":"RB","ovr":78,"ano":2018,"titulos":1,"squads":[{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2018},{"nome":"Edílson","pos":"RW","ovr":93,"ano":2002,"titulos":2,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2002},{"nome":"Édson","pos":"ST","ovr":83,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1986},{"nome":"Edu Dracena","pos":"CB","ovr":82,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Eduardo","pos":"AM","ovr":84,"ano":1976,"titulos":2,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"},{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1974},{"nome":"Eduardo Amorim","pos":"AM","ovr":84,"ano":1975,"titulos":1,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1969},{"nome":"Egídio","pos":"LB","ovr":84,"ano":2013,"titulos":4,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2013},{"nome":"Eli Mendes","pos":"ST","ovr":77,"ano":1975,"titulos":1,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1974},{"nome":"Elivélton","pos":"ST","ovr":91,"ano":1997,"titulos":2,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1997},{"nome":"Ernani","pos":"ST","ovr":86,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1986},{"nome":"Evaldo","pos":"ST","ovr":90,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1966},{"nome":"Everton Ribeiro","pos":"AM","ovr":86,"ano":2013,"titulos":1,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"}],"estreia":2013},{"nome":"Éverton Ribeiro","pos":"AM","ovr":93,"ano":2014,"titulos":1,"squads":[{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Ezequiel","pos":"RB","ovr":79,"ano":2017,"titulos":1,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"}],"estreia":2016},{"nome":"Fabinho","pos":"DM","ovr":86,"ano":1996,"titulos":3,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1995},{"nome":"Fábio","pos":"GK","ovr":92,"ano":2009,"titulos":6,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"},{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":1999},{"nome":"Fábio Júnior","pos":"ST","ovr":88,"ano":1998,"titulos":3,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":1998},{"nome":"Felipe Melo","pos":"DM","ovr":81,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Fernandinho","pos":"LB","ovr":77,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2008},{"nome":"Fernando Miguel","pos":"DM","ovr":80,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Fred","pos":"ST","ovr":75,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2004},{"nome":"Gélson Baresi","pos":"CB","ovr":83,"ano":1996,"titulos":3,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1995},{"nome":"Genílson","pos":"LB","ovr":79,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Geovanni","pos":"AM","ovr":91,"ano":2000,"titulos":2,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":1997},{"nome":"Gerson Magrão","pos":"LB","ovr":77,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2008},{"nome":"Gilberto","pos":"RW","ovr":78,"ano":1998,"titulos":1,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1998},{"nome":"Gilmar Francisco","pos":"CB","ovr":81,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Gladstone","pos":"CB","ovr":77,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Gomes","pos":"GK","ovr":85,"ano":1987,"titulos":2,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":1982},{"nome":"Henrique","pos":"CM","ovr":84,"ano":2009,"titulos":6,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"},{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2008},{"nome":"Heraldo","pos":"CB","ovr":76,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Hilton Oliveira","pos":"LW","ovr":83,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1958},{"nome":"Hudson","pos":"DM","ovr":79,"ano":2017,"titulos":1,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"}],"estreia":2017},{"nome":"Isidoro","pos":"CM","ovr":80,"ano":1975,"titulos":1,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1975},{"nome":"Jackson","pos":"CM","ovr":81,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2000},{"nome":"Jadson","pos":"CM","ovr":75,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Jairzinho","pos":"RW","ovr":90,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1976},{"nome":"Jean","pos":"GK","ovr":77,"ano":1996,"titulos":2,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1996},{"nome":"Jeferson","pos":"GK","ovr":75,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2000},{"nome":"Jefferson","pos":"GK","ovr":83,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2000},{"nome":"Jerry","pos":"CB","ovr":75,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1988},{"nome":"João Carlos","pos":"LB","ovr":78,"ano":1998,"titulos":1,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1994},{"nome":"Joãozinho","pos":"LW","ovr":92,"ano":1975,"titulos":3,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":1973},{"nome":"Jonathan","pos":"RB","ovr":77,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2005},{"nome":"Jorge Wagner","pos":"AM","ovr":88,"ano":2001,"titulos":2,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2001},{"nome":"Júlio Baptista","pos":"ST","ovr":83,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Jussiê","pos":"LW","ovr":79,"ano":2002,"titulos":2,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2001},{"nome":"Kanu","pos":"ST","ovr":79,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2001},{"nome":"Kléber","pos":"ST","ovr":81,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2009},{"nome":"Léo Renan","pos":"CB","ovr":82,"ano":2013,"titulos":5,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2010},{"nome":"Léo (1997)","pos":"CM","ovr":79,"ano":1997,"titulos":1,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1997},{"nome":"Leonardo","pos":"ST","ovr":78,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Leonardo Silva","pos":"CB","ovr":82,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2009},{"nome":"Luan","pos":"CM","ovr":79,"ano":2013,"titulos":1,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"}],"estreia":2013},{"nome":"Lucas Romero","pos":"DM","ovr":81,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2016},{"nome":"Lucas Silva","pos":"DM","ovr":87,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2012},{"nome":"Lúcio","pos":"ST","ovr":78,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Luis Fernando","pos":"LW","ovr":79,"ano":1996,"titulos":1,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"}],"estreia":1995},{"nome":"Luís Fernando","pos":"AM","ovr":85,"ano":1991,"titulos":2,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1991},{"nome":"Luisão","pos":"CB","ovr":84,"ano":2001,"titulos":3,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2000},{"nome":"Luizinho","pos":"CB","ovr":82,"ano":1992,"titulos":1,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1992},{"nome":"Macalé","pos":"CM","ovr":77,"ano":1991,"titulos":2,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1991},{"nome":"Maicon","pos":"RB","ovr":84,"ano":2001,"titulos":3,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2001},{"nome":"Manoel","pos":"CB","ovr":81,"ano":2013,"titulos":4,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2014},{"nome":"Marcelo Batatais","pos":"CB","ovr":81,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Marcelo Djian","pos":"CB","ovr":81,"ano":1998,"titulos":1,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1997},{"nome":"Marcelo Moreno","pos":"ST","ovr":85,"ano":2009,"titulos":2,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2007},{"nome":"Marcelo Ramos","pos":"ST","ovr":91,"ano":1996,"titulos":5,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":1995},{"nome":"Marco Antônio","pos":"CM","ovr":76,"ano":1966,"titulos":1,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"}],"estreia":1966},{"nome":"Marcos Paulo","pos":"CM","ovr":79,"ano":2000,"titulos":2,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2000},{"nome":"Marcos Teixeira","pos":"RB","ovr":79,"ano":1997,"titulos":1,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1996},{"nome":"Marcus Vinícius","pos":"DM","ovr":80,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Mário Tilico","pos":"RW","ovr":89,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1991},{"nome":"Marlone","pos":"LW","ovr":80,"ano":2014,"titulos":1,"squads":[{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2014},{"nome":"Marquinhos","pos":"LW","ovr":80,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1991},{"nome":"Marquinhos Gabriel","pos":"LW","ovr":80,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Marquinhos Paraná","pos":"CM","ovr":77,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2008},{"nome":"Maurinho","pos":"LB","ovr":78,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003},{"nome":"Mayke","pos":"RB","ovr":83,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Moraes","pos":"CB","ovr":82,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1976},{"nome":"Morais","pos":"CB","ovr":82,"ano":1975,"titulos":1,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1969},{"nome":"Muller","pos":"LW","ovr":84,"ano":1998,"titulos":2,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":1998},{"nome":"Murilo (1968)","pos":"CM","ovr":81,"ano":1968,"titulos":1,"squads":[{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1968},{"nome":"Murilo Cerqueira","pos":"CB","ovr":83,"ano":2017,"titulos":1,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"}],"estreia":2017},{"nome":"Natal","pos":"RW","ovr":88,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1964},{"nome":"Neco","pos":"LB","ovr":86,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1965},{"nome":"Neílton","pos":"LW","ovr":79,"ano":2014,"titulos":1,"squads":[{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2014},{"nome":"Nelinho","pos":"RB","ovr":90,"ano":1975,"titulos":2,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1973},{"nome":"Nilton","pos":"DM","ovr":85,"ano":2013,"titulos":1,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"}],"estreia":2013},{"nome":"Nonato","pos":"LB","ovr":86,"ano":1991,"titulos":5,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"},{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1991},{"nome":"Orejuela","pos":"RB","ovr":78,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Oséas","pos":"ST","ovr":85,"ano":2000,"titulos":2,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2000},{"nome":"Osíris","pos":"CM","ovr":79,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1975},{"nome":"Palhinha","pos":"ST","ovr":91,"ano":1975,"titulos":4,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"},{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1968},{"nome":"Paulão","pos":"CB","ovr":80,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1991},{"nome":"Paulinho","pos":"RW","ovr":76,"ano":1991,"titulos":1,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"}],"estreia":1991},{"nome":"Paulo César","pos":"GK","ovr":86,"ano":1991,"titulos":3,"squads":[{"ano":1991,"titulo":"Supercopa Libertadores 1991"},{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1989},{"nome":"Paulo Roberto","pos":"CB","ovr":82,"ano":1992,"titulos":2,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1992},{"nome":"Pedro Paulo","pos":"RB","ovr":86,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1963},{"nome":"Pedro Rocha","pos":"RW","ovr":74,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Piazza","pos":"DM","ovr":89,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1963},{"nome":"Procópio","pos":"CB","ovr":83,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1959},{"nome":"Rafael","pos":"GK","ovr":76,"ano":2014,"titulos":2,"squads":[{"ano":2014,"titulo":"Campeonato Brasileiro 2014"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2008},{"nome":"Rafael Sobis","pos":"ST","ovr":80,"ano":2017,"titulos":2,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2016},{"nome":"Rafinha","pos":"RW","ovr":81,"ano":2018,"titulos":1,"squads":[{"ano":2018,"titulo":"Copa do Brasil 2018"}],"estreia":2011},{"nome":"Ramires","pos":"AM","ovr":85,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2007},{"nome":"Raniel","pos":"ST","ovr":79,"ano":2017,"titulos":2,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2017},{"nome":"Raul","pos":"GK","ovr":88,"ano":1975,"titulos":2,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1965},{"nome":"Raul Plassmann","pos":"GK","ovr":88,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1965},{"nome":"Recife","pos":"DM","ovr":77,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2002},{"nome":"Reinaldo","pos":"LW","ovr":79,"ano":1997,"titulos":1,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1997},{"nome":"Renato Gaúcho","pos":"RW","ovr":93,"ano":1992,"titulos":1,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"}],"estreia":1992},{"nome":"Ricardinho","pos":"CM","ovr":90,"ano":1996,"titulos":6,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"},{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"},{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":1994},{"nome":"Ricardo Goulart","pos":"AM","ovr":93,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Roberto Batata","pos":"ST","ovr":85,"ano":1975,"titulos":2,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1971},{"nome":"Roberto Gaúcho","pos":"ST","ovr":91,"ano":1992,"titulos":3,"squads":[{"ano":1992,"titulo":"Supercopa Libertadores 1992"},{"ano":1993,"titulo":"Copa do Brasil 1993"},{"ano":1996,"titulo":"Copa do Brasil 1996"}],"estreia":1992},{"nome":"Robinho","pos":"LW","ovr":84,"ano":2017,"titulos":3,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2016},{"nome":"Robson","pos":"ST","ovr":88,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1985},{"nome":"Róbson","pos":"RB","ovr":79,"ano":1993,"titulos":1,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1993},{"nome":"Rodrigo","pos":"RB","ovr":79,"ano":2000,"titulos":1,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":2000},{"nome":"Rodrigues","pos":"LW","ovr":82,"ano":1968,"titulos":1,"squads":[{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1968},{"nome":"Rodriguinho","pos":"AM","ovr":84,"ano":2019,"titulos":1,"squads":[{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2019},{"nome":"Rogério","pos":"CM","ovr":78,"ano":1993,"titulos":1,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1991},{"nome":"Ronaldo Drumond","pos":"CM","ovr":79,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1976},{"nome":"Ronaldo Fenômeno","pos":"ST","ovr":89,"ano":1993,"titulos":1,"squads":[{"ano":1993,"titulo":"Copa do Brasil 1993"}],"estreia":1993},{"nome":"Ruy","pos":"RB","ovr":80,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Sassá","pos":"ST","ovr":81,"ano":2017,"titulos":3,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2017},{"nome":"Sérgio Manoel","pos":"CM","ovr":78,"ano":2001,"titulos":1,"squads":[{"ano":2001,"titulo":"Copa Sul-Minas 2001"}],"estreia":2001},{"nome":"Sorín","pos":"LB","ovr":89,"ano":2000,"titulos":3,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"},{"ano":2001,"titulo":"Copa Sul-Minas 2001"},{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2000},{"nome":"Thiago Heleno","pos":"CB","ovr":82,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2006},{"nome":"Thiago Neves","pos":"AM","ovr":89,"ano":2017,"titulos":3,"squads":[{"ano":2017,"titulo":"Copa do Brasil 2017"},{"ano":2018,"titulo":"Copa do Brasil 2018"},{"ano":2019,"titulo":"Campeonato Mineiro 2019"}],"estreia":2017},{"nome":"Thiago Ribeiro","pos":"ST","ovr":78,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2008},{"nome":"Tinga","pos":"DM","ovr":83,"ano":2014,"titulos":1,"squads":[{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2012},{"nome":"Tostão","pos":"ST","ovr":95,"ano":1966,"titulos":2,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1963},{"nome":"Ueslei","pos":"CM","ovr":79,"ano":1996,"titulos":1,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"}],"estreia":1996},{"nome":"Valdir","pos":"CM","ovr":77,"ano":1998,"titulos":1,"squads":[{"ano":1998,"titulo":"Copa Libertadores 1998 (Oitavas de Final)"}],"estreia":1998},{"nome":"Vander","pos":"LW","ovr":81,"ano":2002,"titulos":1,"squads":[{"ano":2002,"titulo":"Copa Sul-Minas 2002"}],"estreia":2002},{"nome":"Vanderlei","pos":"LB","ovr":82,"ano":1975,"titulos":2,"squads":[{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1969},{"nome":"Vanderlei Lima","pos":"RW","ovr":82,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Vieira","pos":"CB","ovr":79,"ano":1976,"titulos":1,"squads":[{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1976},{"nome":"Vilmar","pos":"CB","ovr":78,"ano":1987,"titulos":1,"squads":[{"ano":1987,"titulo":"Campeonato Mineiro 1987"}],"estreia":1987},{"nome":"Vitor","pos":"RB","ovr":81,"ano":1996,"titulos":2,"squads":[{"ano":1996,"titulo":"Copa do Brasil 1996"},{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1996},{"nome":"Viveros","pos":"RW","ovr":80,"ano":2000,"titulos":1,"squads":[{"ano":2000,"titulo":"Copa do Brasil 2000"}],"estreia":2000},{"nome":"Wagner","pos":"AM","ovr":80,"ano":2009,"titulos":1,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"}],"estreia":2004},{"nome":"Wellington Paulista","pos":"ST","ovr":80,"ano":2009,"titulos":2,"squads":[{"ano":2009,"titulo":"Copa Libertadores 2009 (Vice)"},{"ano":2013,"titulo":"Campeonato Brasileiro 2013"}],"estreia":2009},{"nome":"Wendel","pos":"CM","ovr":79,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2001},{"nome":"William","pos":"CB","ovr":86,"ano":1966,"titulos":1,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"}],"estreia":1966},{"nome":"Willian","pos":"LW","ovr":85,"ano":2013,"titulos":2,"squads":[{"ano":2013,"titulo":"Campeonato Brasileiro 2013"},{"ano":2014,"titulo":"Campeonato Brasileiro 2014"}],"estreia":2013},{"nome":"Wilson Almeida","pos":"ST","ovr":79,"ano":1968,"titulos":1,"squads":[{"ano":1968,"titulo":"Campeonato Mineiro 1968"}],"estreia":1966},{"nome":"Wilson Gottardo","pos":"CB","ovr":84,"ano":1997,"titulos":1,"squads":[{"ano":1997,"titulo":"Copa Libertadores 1997"}],"estreia":1997},{"nome":"Wilson Piazza","pos":"DM","ovr":88,"ano":1966,"titulos":3,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"},{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"}],"estreia":1963},{"nome":"Zé Carlos","pos":"CM","ovr":86,"ano":1966,"titulos":4,"squads":[{"ano":1966,"titulo":"Taça Brasil 1966"},{"ano":1968,"titulo":"Campeonato Mineiro 1968"},{"ano":1975,"titulo":"Campeonato Brasileiro 1975 (Vice)"},{"ano":1976,"titulo":"Copa Libertadores 1976"}],"estreia":1965},{"nome":"Zinho","pos":"CM","ovr":78,"ano":2003,"titulos":1,"squads":[{"ano":2003,"titulo":"Campeonato Brasileiro 2003"}],"estreia":2003}];
+
+const POS_GROUP = {GK:'GOL',LB:'DEF',CB:'DEF',RB:'DEF',DM:'MEI',CM:'MEI',AM:'MEI',LW:'ATA',RW:'ATA',ST:'ATA'};
+const POS_LABEL = {GK:'GOL',LB:'LAT-E',CB:'ZAG',RB:'LAT-D',DM:'VOL',CM:'MEI',AM:'MEIA',LW:'PONTA-E',RW:'PONTA-D',ST:'ATA'};
+const MAX_TRIES = 8;
+const LAUNCH_DATE = {y:2026, m:8, d:17}; // dia 1 do desafio
+const STATS_KEY = 'cruzeirodle_stats_v1';
+const DAILY_PREFIX = 'cruzeirodle_daily_';
+
+let mode = 'daily';
+let answer = null;
+let guesses = [];
+let finished = false;
+let won = false;
+
+function normalize(s){
+  return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+}
+
+function findPlayerByName(nameRaw){
+  const n = normalize(nameRaw);
+  if(!n) return null;
+  return PLAYERS.find(p => normalize(p.nome) === n) || null;
+}
+
+function dailyKeyString(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function dayNumber(){
+  const now = new Date();
+  const launch = Date.UTC(LAUNCH_DATE.y, LAUNCH_DATE.m-1, LAUNCH_DATE.d);
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.max(1, Math.floor((today-launch)/86400000) + 1);
+}
+
+function seededIndexForToday(){
+  const key = dailyKeyString();
+  let h = 0;
+  for(let i=0;i<key.length;i++){ h = (h*31 + key.charCodeAt(i)) >>> 0; }
+  return h % PLAYERS.length;
+}
+
+function safeStorageGet(key){
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+function safeStorageSet(key, val){
+  try{ localStorage.setItem(key, val); }catch(e){ /* modo privado ou storage bloqueado: só não persiste */ }
+}
+
+function loadStats(){
+  const raw = safeStorageGet(STATS_KEY);
+  if(!raw) return {played:0, wins:0, streak:0, maxStreak:0, dist:[0,0,0,0,0,0,0,0], lastWinDay:0};
+  try{ return JSON.parse(raw); }catch(e){ return {played:0, wins:0, streak:0, maxStreak:0, dist:[0,0,0,0,0,0,0,0], lastWinDay:0}; }
+}
+function saveStats(s){ safeStorageSet(STATS_KEY, JSON.stringify(s)); }
+
+function loadDailyState(){
+  const raw = safeStorageGet(DAILY_PREFIX + dailyKeyString());
+  if(!raw) return null;
+  try{ return JSON.parse(raw); }catch(e){ return null; }
+}
+function saveDailyState(){
+  safeStorageSet(DAILY_PREFIX + dailyKeyString(), JSON.stringify({guesses, finished, won}));
+}
+
+// autocomplete próprio (não depende do <datalist> nativo, que tem suporte
+// inconsistente entre navegadores — principalmente no Safari/iOS)
+function renderSuggestions(){
+  const list = document.getElementById('ac-list');
+  const input = document.getElementById('guess-input');
+  const n = normalize(input.value);
+  if(!n){ list.classList.add('hidden'); list.innerHTML=''; return; }
+  const already = new Set(guesses.map(g=>g.nome));
+  const matches = PLAYERS.filter(p => !already.has(p.nome) && normalize(p.nome).includes(n)).slice(0,8);
+  if(!matches.length){
+    list.innerHTML = '<div class="ac-empty">Nenhum jogador encontrado</div>';
+    list.classList.remove('hidden');
+    return;
+  }
+  list.innerHTML = matches.map(p=>`<div class="ac-item" data-nome="${p.nome.replace(/"/g,'&quot;')}">${p.nome}</div>`).join('');
+  list.classList.remove('hidden');
+}
+function hideSuggestions(){
+  document.getElementById('ac-list').classList.add('hidden');
+}
+function setupAutocomplete(){
+  const input = document.getElementById('guess-input');
+  const list = document.getElementById('ac-list');
+  input.addEventListener('input', renderSuggestions);
+  input.addEventListener('focus', renderSuggestions);
+  input.addEventListener('blur', ()=> setTimeout(hideSuggestions, 150));
+  list.addEventListener('mousedown', (evt)=>{
+    const item = evt.target.closest('.ac-item');
+    if(!item) return;
+    evt.preventDefault();
+    const nome = item.getAttribute('data-nome');
+    input.value = nome;
+    hideSuggestions();
+    submitGuessByName(nome);
+  });
+}
+
+function showGuessError(msg){
+  const errEl = document.getElementById('guess-error');
+  errEl.textContent = msg;
+  errEl.classList.toggle('show', !!msg);
+}
+
+function switchMode(m){
+  mode = m;
+  document.getElementById('btn-mode-daily').classList.toggle('active', m==='daily');
+  document.getElementById('btn-mode-random').classList.toggle('active', m==='random');
+  showGuessError('');
+  hideSuggestions();
+  if(m==='daily'){
+    answer = PLAYERS[seededIndexForToday()];
+    const saved = loadDailyState();
+    if(saved){ guesses = saved.guesses; finished = saved.finished; won = saved.won; }
+    else { guesses = []; finished = false; won = false; }
+  } else {
+    answer = PLAYERS[Math.floor(Math.random()*PLAYERS.length)];
+    guesses = []; finished = false; won = false;
+  }
+  render();
+}
+
+function computeFeedback(guess, ans){
+  const posColor = guess.pos === ans.pos ? 'green' : (POS_GROUP[guess.pos]===POS_GROUP[ans.pos] ? 'yellow' : 'gray');
+  const ovrColor = guess.ovr === ans.ovr ? 'green' : 'gray';
+  const ovrArrow = guess.ovr === ans.ovr ? '' : (ans.ovr > guess.ovr ? '↑' : '↓');
+  const titColor = guess.titulos === ans.titulos ? 'green' : 'gray';
+  const titArrow = guess.titulos === ans.titulos ? '' : (ans.titulos > guess.titulos ? '↑' : '↓');
+  const inicialColor = normalize(guess.nome)[0] === normalize(ans.nome)[0] ? 'green' : 'gray';
+
+  // "Estreia" usa o ano de estreia REAL pesquisado — nem todo jogador (principalmente
+  // os mais obscuros) tem essa informação confirmada em fontes confiáveis. Quando falta
+  // (do palpite ou do próprio jogador-mistério) mostramos "?" em vez de arriscar um ano errado.
+  let anoLabel, anoColor;
+  if(guess.estreia == null){
+    anoLabel = '?';
+    anoColor = 'gray';
+  } else if(ans.estreia == null){
+    anoLabel = guess.estreia + '¹';
+    anoColor = 'gray';
+  } else if(guess.estreia === ans.estreia){
+    anoLabel = String(guess.estreia);
+    anoColor = 'green';
+  } else {
+    const arrow = ans.estreia > guess.estreia ? '↑' : '↓';
+    const sameDecade = Math.floor(guess.estreia/10) === Math.floor(ans.estreia/10);
+    anoLabel = guess.estreia + arrow;
+    anoColor = sameDecade ? 'yellow' : 'gray';
+  }
+
+  return {
+    pos: {label:'Posição', value:POS_LABEL[guess.pos]||guess.pos, color:posColor},
+    ovr: {label:'Overall', value:guess.ovr+ovrArrow, color:ovrColor},
+    ano: {label:'Estreia', value:anoLabel, color:anoColor},
+    tit: {label:'Títulos', value:guess.titulos+titArrow, color:titColor},
+    ini: {label:'Inicial', value:normalize(guess.nome)[0].toUpperCase(), color:inicialColor},
+  };
+}
+
+function handleGuessSubmit(evt){
+  evt.preventDefault();
+  hideSuggestions();
+  const input = document.getElementById('guess-input');
+  submitGuessByName(input.value);
+  return false;
+}
+
+// núcleo do palpite, reutilizado tanto pelo botão "Chutar"/Enter quanto por
+// clicar direto numa sugestão da lista de autocomplete
+function submitGuessByName(val){
+  if(finished) return;
+  const input = document.getElementById('guess-input');
+  const player = findPlayerByName(val);
+  if(!player){
+    showGuessError('Jogador não encontrado — escolhe um nome da listinha de sugestões que aparece ao digitar.');
+    return;
+  }
+  if(guesses.some(g => g.nome === player.nome)){
+    showGuessError('Você já chutou esse jogador!');
+    return;
+  }
+  showGuessError('');
+  const feedback = computeFeedback(player, answer);
+  guesses.push({...player, feedback});
+  if(player.nome === answer.nome){
+    finished = true; won = true;
+  } else if(guesses.length >= MAX_TRIES){
+    finished = true; won = false;
+  }
+  input.value = '';
+  if(finished && mode==='daily'){
+    const stats = loadStats();
+    const today = dayNumber();
+    if(stats.lastWinDay !== today){
+      stats.played++;
+      if(won){
+        stats.wins++;
+        stats.streak++;
+        stats.maxStreak = Math.max(stats.maxStreak, stats.streak);
+        stats.dist[guesses.length-1]++;
+      } else {
+        stats.streak = 0;
+      }
+      stats.lastWinDay = today;
+      saveStats(stats);
+    }
+    saveDailyState();
+  }
+  render();
+}
+
+function renderStatsBar(){
+  const s = loadStats();
+  const wrap = document.getElementById('stats-bar');
+  if(mode!=='daily'){ wrap.innerHTML = '<div style="color:#cdd8ff;font-size:.8em;">Modo treino — não conta pras estatísticas</div>'; return; }
+  const winPct = s.played ? Math.round(100*s.wins/s.played) : 0;
+  wrap.innerHTML = `
+    <div><b>${s.played}</b><span>Jogos</span></div>
+    <div><b>${winPct}%</b><span>Vitórias</span></div>
+    <div><b>${s.streak}</b><span>Sequência</span></div>
+    <div><b>${s.maxStreak}</b><span>Recorde</span></div>
+  `;
+}
+
+function renderGuesses(){
+  const list = document.getElementById('guesses-list');
+  list.innerHTML = guesses.map(g => `
+    <div class="guess-row">
+      <div class="guess-name">${g.nome}</div>
+      ${['pos','ovr','ano','tit','ini'].map(k=>{
+        const f = g.feedback[k];
+        return `<div class="g-cell g-${f.color}"><span class="g-label">${f.label}</span><span class="g-val">${f.value}</span></div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function renderResult(){
+  const card = document.getElementById('result-card');
+  const gameCard = document.getElementById('game-card');
+  if(!finished){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  const title = document.getElementById('result-title');
+  title.textContent = won ? `🎉 Você acertou em ${guesses.length}!` : '😔 Não dessa vez...';
+  title.className = 'result-title ' + (won?'win':'lose');
+
+  const estreiaTxt = answer.estreia != null ? `Estreou em ${answer.estreia}` : 'Estreia não documentada';
+  document.getElementById('reveal-player').innerHTML = `
+    <div class="rp-name">${answer.nome}</div>
+    <div class="rp-sub">${POS_LABEL[answer.pos]} · Overall ${answer.ovr} · ${estreiaTxt} · ${answer.titulos} elenco(s) histórico(s)</div>
+  `;
+  document.getElementById('reveal-squads').innerHTML = answer.squads.map(sq=>`<div class="rs-row"><span>${sq.titulo}</span><b>${sq.ano}</b></div>`).join('');
+
+  const emojiMap = {green:'🟩', yellow:'🟨', gray:'⬜'};
+  const grid = guesses.map(g => ['pos','ovr','ano','tit','ini'].map(k=>emojiMap[g.feedback[k].color]).join('')).join('\n');
+  document.getElementById('share-emoji-block').textContent = grid;
+}
+
+function render(){
+  document.getElementById('day-number').textContent = dayNumber();
+  document.getElementById('guess-form').classList.toggle('hidden', finished);
+  document.getElementById('tries-label').textContent = finished ? '' : `Tentativa ${guesses.length+1} de ${MAX_TRIES}`;
+  renderStatsBar();
+  renderGuesses();
+  renderResult();
+}
+
+function buildShareText(){
+  const day = mode==='daily' ? `#${dayNumber()}` : '(treino)';
+  const scoreTxt = won ? `${guesses.length}/${MAX_TRIES}` : `X/${MAX_TRIES}`;
+  const emojiMap = {green:'🟩', yellow:'🟨', gray:'⬜'};
+  const grid = guesses.map(g => ['pos','ovr','ano','tit','ini'].map(k=>emojiMap[g.feedback[k].color]).join('')).join('\n');
+  return `CRUZEIRODLE ${day} ${scoreTxt}\n${grid}\n\nJogue: cruzeiro-dos-sonhos`;
+}
+
+function showToast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; }, 1800);
+  setTimeout(()=> t.remove(), 2200);
+}
+
+function copyShareText(){
+  const text = buildShareText();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=> showToast('Copiado! Cola no zap 📲')).catch(()=> fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); showToast('Copiado! Cola no zap 📲'); }
+  catch(e){ showToast('Não deu pra copiar automaticamente 😕'); }
+  ta.remove();
+}
+
+function downloadShareCard(){
+  const host = document.getElementById('share-card-host');
+  if(!host || typeof html2canvas !== 'function'){
+    showToast('Não foi possível gerar a imagem agora.');
+    return;
+  }
+  const day = mode==='daily' ? `#${dayNumber()}` : 'Treino';
+  const scoreTxt = won ? `${guesses.length}/${MAX_TRIES}` : `X/${MAX_TRIES}`;
+  const emojiMap = {green:'🟩', yellow:'🟨', gray:'⬜'};
+  const gridHTML = guesses.map(g => `<div>${['pos','ovr','ano','tit','ini'].map(k=>emojiMap[g.feedback[k].color]).join('')}</div>`).join('');
+  host.innerHTML = `
+    <div style="width:480px;background:linear-gradient(160deg, var(--azul-esc) 0%, var(--azul) 55%, var(--azul-esc) 100%);border:6px solid var(--dourado);border-radius:22px;padding:26px;font-family:'Segoe UI',Arial,sans-serif;color:#fff;">
+      <div style="font-family:var(--font-display);font-weight:700;letter-spacing:.5px;font-size:1.3em;text-transform:uppercase;margin-bottom:4px;">CRUZEIRODLE ${day}</div>
+      <div style="color:#cdd8ff;font-size:.85em;margin-bottom:16px;">${won ? `Acertei em ${scoreTxt} tentativas` : `Não consegui dessa vez (${scoreTxt})`}</div>
+      <div style="font-size:1.6em;line-height:1.35;letter-spacing:3px;margin-bottom:16px;">${gridHTML}</div>
+      <div style="font-size:.75em;color:#8892b0;">Cruzeiro dos Sonhos — jogo não-oficial feito por torcedor</div>
+    </div>`;
+  const cardEl = host.firstElementChild;
+  html2canvas(cardEl, {scale:2, backgroundColor:null}).then(canvas=>{
+    canvas.toBlob(blob=>{
+      if(!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cruzeirodle-${mode==='daily'?dayNumber():'treino'}.png`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 4000);
+    });
+  }).catch(()=> showToast('Não foi possível gerar a imagem agora.'));
+}
+
+setupAutocomplete();
+switchMode('daily');
+document.getElementById('btn-mode-daily').classList.add('active');
+</script>
+</body>
+</html>

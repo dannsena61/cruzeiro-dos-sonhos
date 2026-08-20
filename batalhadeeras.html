@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batalha de Eras — Cruzeiro dos Sonhos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
+  :root{
+    --azul:#0d3a94;
+    --azul-esc:#081f4f;
+    --azul-vivo:#2f6fed;
+    --azul-claro:#7ec8ff;
+    --branco:#ffffff;
+    --dourado:#f4c430;
+    --verde:#1f9d55;
+    --verde-esc:#16793f;
+    --amarelo:#e0a800;
+    --vermelho:#c62828;
+    --sombra: 0 10px 30px rgba(7,29,77,.25);
+    --radius: 16px;
+    --font-display: 'Oswald', 'Segoe UI', Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    position:relative;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #2b57d6 0%, var(--azul) 45%, var(--azul-esc) 100%);
+    color:var(--branco);
+    display:flex;justify-content:center;padding:20px 14px 60px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1.6px 1.6px at 8% 12%, rgba(255,255,255,.55) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 22% 38%, rgba(255,255,255,.4) 50%, transparent 52%),
+      radial-gradient(1.8px 1.8px at 36% 8%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.2px 1.2px at 52% 28%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.6px 1.6px at 68% 14%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 79% 42%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.8px 1.8px at 91% 20%, rgba(255,255,255,.5) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 14% 66%, rgba(255,255,255,.35) 50%, transparent 52%),
+      radial-gradient(1.6px 1.6px at 61% 72%, rgba(255,255,255,.4) 50%, transparent 52%),
+      radial-gradient(1.3px 1.3px at 85% 78%, rgba(255,255,255,.35) 50%, transparent 52%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 2px, transparent 2px, transparent 26px);
+    background-repeat: repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat;
+    background-size: 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px, auto;
+  }
+  #app{width:100%;max-width:760px;position:relative;z-index:1;}
+  header.top{text-align:center;margin-bottom:20px;}
+  .badge{width:70px;height:70px;margin:0 auto 8px;display:block;filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));}
+  .badge .star{fill:#ffffff;}
+  h1.title{font-family:var(--font-display);text-transform:uppercase;font-size:1.9em;margin:4px 0 2px;letter-spacing:1.5px;text-shadow:0 3px 10px rgba(0,0,0,.35);}
+  h1.title span{color:var(--dourado);}
+  .subtitle{color:#cdd8ff;font-size:.92em;margin:0;}
+  .backlink{display:inline-block;margin-top:8px;font-size:.8em;color:#cdd8ff;text-decoration:none;border-bottom:1px dotted rgba(205,216,255,.5);}
+  .backlink:hover{color:#fff;}
+
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.02) 100%);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:var(--radius);
+    padding:18px 18px 16px;
+    box-shadow:var(--sombra);
+    margin-bottom:16px;
+  }
+  h2.h{font-family:var(--font-display);text-transform:uppercase;font-size:1.15em;letter-spacing:.5px;margin:0 0 10px;color:var(--dourado);}
+  p.lead{color:#dbe4ff;font-size:.94em;line-height:1.55;margin:0 0 12px;}
+
+  .btn{
+    font-family:var(--font-display);text-transform:uppercase;letter-spacing:.5px;font-size:.88em;font-weight:600;
+    background:var(--dourado);color:var(--azul-esc);border:none;border-radius:999px;
+    padding:11px 22px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.25);transition:transform .1s ease, filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:translateY(1px);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn.secondary{background:rgba(255,255,255,.14);color:#fff;}
+  .btn.ghost{background:transparent;color:#cdd8ff;border:1px solid rgba(255,255,255,.3);box-shadow:none;}
+  .btn.small{padding:7px 14px;font-size:.78em;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+  .btn-row.center{justify-content:center;}
+
+  .squad-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(min-width:520px){ .squad-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .squad-card{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:12px;
+    padding:12px 10px;cursor:pointer;text-align:center;transition:all .12s ease;
+  }
+  .squad-card:hover{background:rgba(255,255,255,.14);border-color:var(--dourado);transform:translateY(-2px);}
+  .squad-card.selected{background:rgba(244,196,48,.18);border-color:var(--dourado);}
+  .squad-card .sc-year{font-family:var(--font-display);font-size:1.3em;font-weight:700;color:var(--dourado);}
+  .squad-card .sc-titulo{font-size:.74em;color:#cdd8ff;margin-top:2px;line-height:1.3;min-height:2.6em;}
+  .squad-card .sc-ovr{font-size:.72em;color:#8892b0;margin-top:4px;}
+
+  .opp-preview{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px;margin-bottom:14px;}
+  .opp-preview .vs{font-family:var(--font-display);font-size:1.6em;color:var(--dourado);}
+  .opp-side{flex:1;text-align:center;}
+  .opp-side .os-year{font-family:var(--font-display);font-size:1.4em;font-weight:700;}
+  .opp-side .os-titulo{font-size:.76em;color:#cdd8ff;margin-top:2px;}
+  .opp-side .os-ovr{font-size:.78em;color:var(--dourado);margin-top:4px;font-weight:600;}
+
+  .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(min-width:480px){ .choice-grid{grid-template-columns:repeat(5,1fr);} }
+  .choice-grid.tatica{grid-template-columns:1fr;gap:8px;}
+  .choice-btn{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:10px;
+    padding:10px 8px;cursor:pointer;text-align:center;color:#fff;transition:all .12s ease;
+  }
+  .choice-btn:hover{background:rgba(255,255,255,.13);}
+  .choice-btn.selected{background:rgba(244,196,48,.2);border-color:var(--dourado);}
+  .choice-btn .cb-label{font-family:var(--font-display);font-size:.86em;letter-spacing:.3px;}
+  .tatica .choice-btn{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:10px 14px;gap:10px;}
+  .tatica .cb-desc{font-size:.76em;color:#b9c6ee;margin-top:2px;font-weight:400;}
+  .tatica .cb-main{flex:1;}
+
+  .rating-preview{display:flex;justify-content:center;align-items:baseline;gap:8px;margin:14px 0 4px;}
+  .rating-preview .rp-num{font-family:var(--font-display);font-size:2.4em;font-weight:700;color:var(--dourado);}
+  .rating-preview .rp-label{font-size:.8em;color:#cdd8ff;text-transform:uppercase;letter-spacing:.5px;}
+
+  .score-panel{text-align:center;margin:10px 0 16px;}
+  .score-panel .sp-teams{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .score-panel .sp-team{flex:1;font-size:.82em;color:#cdd8ff;}
+  .score-panel .sp-score{font-family:var(--font-display);font-size:2.6em;font-weight:700;letter-spacing:2px;}
+  .score-panel .sp-tag{font-size:.72em;color:var(--dourado);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+
+  .events-feed{display:flex;flex-direction:column;gap:6px;margin:10px 0;min-height:20px;}
+  .event-row{font-size:.86em;background:rgba(255,255,255,.05);border-radius:8px;padding:7px 10px;display:flex;gap:8px;align-items:center;animation:fadeIn .25s ease;}
+  .event-row .ev-min{color:var(--dourado);font-weight:700;min-width:34px;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:translateY(0);}}
+
+  .sub-list{display:flex;flex-direction:column;gap:6px;margin:10px 0;}
+  .sub-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border-radius:8px;padding:8px 10px;font-size:.85em;}
+  .sub-row .sr-info{color:#dbe4ff;}
+  .sub-row .sr-info b{color:#fff;}
+  .bench-list{display:flex;flex-direction:column;gap:5px;margin-top:6px;max-height:180px;overflow-y:auto;}
+  .bench-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.08);border-radius:6px;padding:6px 9px;font-size:.8em;cursor:pointer;}
+  .bench-row:hover{background:rgba(244,196,48,.18);}
+  .bench-row .fit-tag{font-size:.7em;padding:2px 6px;border-radius:4px;}
+  .fit-exact{background:rgba(31,157,85,.35);color:#b9f5cf;}
+  .fit-adjacent{background:rgba(224,168,0,.3);color:#ffe6a3;}
+  .fit-mismatch{background:rgba(198,40,40,.3);color:#ffc0bc;}
+
+  .bracket-round{margin-bottom:14px;}
+  .bracket-round h3{font-family:var(--font-display);font-size:.9em;letter-spacing:.5px;color:var(--dourado);text-transform:uppercase;margin:0 0 6px;}
+  .bracket-match{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border-radius:8px;padding:7px 10px;margin-bottom:5px;font-size:.82em;}
+  .bracket-match.you{border:1px solid var(--dourado);background:rgba(244,196,48,.1);}
+  .bracket-match .bm-side{flex:1;}
+  .bracket-match .bm-side.winner{color:var(--dourado);font-weight:700;}
+  .bracket-match .bm-side.loser{color:#8892b0;text-decoration:line-through;}
+  .bracket-match .bm-vs{padding:0 8px;color:#8892b0;font-size:.85em;}
+  .bracket-match .bm-pending{color:#8892b0;font-style:italic;}
+
+  .champion-box{text-align:center;padding:24px 14px;}
+  .champion-box .cb-trophy{font-size:3.2em;}
+  .champion-box h2{font-family:var(--font-display);text-transform:uppercase;font-size:1.7em;color:var(--dourado);margin:8px 0 2px;letter-spacing:1px;}
+  .champion-box .cb-sub{color:#cdd8ff;font-size:.95em;}
+
+  .out-box{text-align:center;padding:20px 14px;}
+  .out-box .ob-emoji{font-size:2.6em;}
+  .out-box h2{font-family:var(--font-display);text-transform:uppercase;font-size:1.4em;color:#ffc0bc;margin:6px 0 2px;}
+
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .tag{font-size:.7em;background:rgba(255,255,255,.1);color:#cdd8ff;padding:3px 8px;border-radius:999px;}
+
+  .step-note{font-size:.78em;color:#8892b0;margin-top:8px;}
+  .narrating{text-align:center;color:#cdd8ff;font-size:.85em;padding:14px 0;}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--dourado);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  footer{margin-top:24px;text-align:center;font-size:.76em;color:#8892b0;line-height:1.6;}
+  footer a{color:#cdd8ff;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <svg class="badge" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <polygon id="star5" points="0,-1 0.2245,-0.309 0.9511,-0.309 0.3633,0.118 0.5878,0.809 0,0.382 -0.5878,0.809 -0.3633,0.118 -0.9511,-0.309 -0.2245,-0.309"/>
+      </defs>
+      <use href="#star5" class="star" transform="translate(50,14) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(17,48) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(79,42) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(50,86) scale(12)"/>
+      <use href="#star5" class="star" transform="translate(49,50) scale(8)"/>
+    </svg>
+    <h1 class="title">Batalha <span>de Eras</span></h1>
+    <p class="subtitle">Escolha uma era do Cruzeiro e comande seu time num mata-mata contra os outros 21 elencos históricos</p>
+    <a class="backlink" href="index.html">🏠 Menu de jogos</a>
+  </header>
+
+  <div id="screens"></div>
+
+  <footer>
+    Jogo não-oficial, feito por torcedor. Parte do universo <a href="index.html">Cruzeiro dos Sonhos</a>.<br>
+    Elencos e overalls são os mesmos do jogo principal, estimados pelo autor para fins de gameplay.
+  </footer>
+</div>
+  <script>
+const SQUADS = [{"id":"tb1966","titulo":"Taça Brasil 1966","ano":1966,"competicao":"Taça Brasil","tecnico":"Airton Moreira","adversario":"Santos (de Pelé)","fato":"Cruzeiro goleou o Santos de Pelé por 6 a 2 na decisão e conquistou seu primeiro título nacional, com a dupla Tostão e Dirceu Lopes.","jogadores":[{"nome":"Raul Plassmann","pos":"GK","ovr":88},{"nome":"Neco","pos":"LB","ovr":86},{"nome":"William","pos":"CB","ovr":86},{"nome":"Procópio","pos":"CB","ovr":83},{"nome":"Pedro Paulo","pos":"RB","ovr":86},{"nome":"Wilson Piazza","pos":"DM","ovr":85},{"nome":"Zé Carlos","pos":"CM","ovr":78},{"nome":"Marco Antônio","pos":"CM","ovr":76},{"nome":"Dirceu Lopes","pos":"AM","ovr":95},{"nome":"Hilton Oliveira","pos":"LW","ovr":83},{"nome":"Natal","pos":"RW","ovr":88},{"nome":"Tostão","pos":"ST","ovr":94},{"nome":"Evaldo","pos":"ST","ovr":90}]},{"id":"lib1976","titulo":"Copa Libertadores 1976","ano":1976,"competicao":"Libertadores","tecnico":"Zezé Moreira","adversario":"River Plate","fato":"Primeiro título continental do Cruzeiro e do futebol mineiro, decidido em partida extra após 2 vitórias a 1 no confronto direto contra o River Plate.","jogadores":[{"nome":"Raul","pos":"GK","ovr":84},{"nome":"Vanderlei","pos":"LB","ovr":82},{"nome":"Moraes","pos":"CB","ovr":82},{"nome":"Darcy Menezes","pos":"CB","ovr":81},{"nome":"Vieira","pos":"CB","ovr":79},{"nome":"Nelinho","pos":"RB","ovr":90},{"nome":"Piazza","pos":"DM","ovr":89},{"nome":"Zé Carlos","pos":"CM","ovr":86},{"nome":"Ronaldo Drumond","pos":"CM","ovr":79},{"nome":"Osíris","pos":"CM","ovr":79},{"nome":"Dirceu Lopes","pos":"AM","ovr":89},{"nome":"Eduardo","pos":"AM","ovr":84},{"nome":"Joãozinho","pos":"LW","ovr":92},{"nome":"Jairzinho","pos":"RW","ovr":90},{"nome":"Palhinha","pos":"ST","ovr":91},{"nome":"Roberto Batata","pos":"ST","ovr":85}]},{"id":"cdb1993","titulo":"Copa do Brasil 1993","ano":1993,"competicao":"Copa do Brasil","tecnico":"Pinheiro","adversario":"Grêmio","fato":"Primeira Copa do Brasil da história do clube, vencida sobre o Grêmio por 2 a 1. O elenco campeão já contava com um garoto de 16 anos: Ronaldo Fenômeno.","jogadores":[{"nome":"Paulo César","pos":"GK","ovr":81},{"nome":"Nonato","pos":"LB","ovr":86},{"nome":"Paulo Roberto","pos":"CB","ovr":81},{"nome":"Célio Lúcio","pos":"CB","ovr":80},{"nome":"Róbson","pos":"RB","ovr":79},{"nome":"Ademir","pos":"DM","ovr":79},{"nome":"Rogério","pos":"CM","ovr":78},{"nome":"Éder Aleixo","pos":"AM","ovr":80},{"nome":"Edenílson","pos":"LW","ovr":80},{"nome":"Roberto Gaúcho","pos":"RW","ovr":91},{"nome":"Ronaldo Fenômeno","pos":"ST","ovr":89},{"nome":"Cleisson","pos":"ST","ovr":81}]},{"id":"cdb1996","titulo":"Copa do Brasil 1996","ano":1996,"competicao":"Copa do Brasil","tecnico":"Levir Culpi","adversario":"Palmeiras","fato":"Bicampeonato da Copa do Brasil sobre o Palmeiras, com Marcelo Ramos e Roberto Gaúcho decisivos nas duas finais.","jogadores":[{"nome":"Dida","pos":"GK","ovr":90},{"nome":"Jean","pos":"GK","ovr":76},{"nome":"Nonato","pos":"LB","ovr":85},{"nome":"Gélson Baresi","pos":"CB","ovr":82},{"nome":"Célio Lúcio","pos":"CB","ovr":80},{"nome":"Vitor","pos":"RB","ovr":80},{"nome":"Fabinho","pos":"DM","ovr":84},{"nome":"Ricardinho","pos":"CM","ovr":84},{"nome":"Ueslei","pos":"CM","ovr":79},{"nome":"Palhinha","pos":"AM","ovr":83},{"nome":"Cleisson","pos":"AM","ovr":81},{"nome":"Luis Fernando","pos":"LW","ovr":79},{"nome":"Marcelo Ramos","pos":"ST","ovr":91},{"nome":"Roberto Gaúcho","pos":"ST","ovr":88}]},{"id":"lib1997","titulo":"Copa Libertadores 1997","ano":1997,"competicao":"Libertadores","tecnico":"Paulo Autuori","adversario":"Sporting Cristal","fato":"Bicampeonato continental do Cruzeiro, 21 anos após o título de 1976, reunindo campeões experientes e reforços vindos do São Paulo.","jogadores":[{"nome":"Dida","pos":"GK","ovr":92},{"nome":"Jean","pos":"GK","ovr":77},{"nome":"Nonato","pos":"LB","ovr":85},{"nome":"Wilson Gottardo","pos":"CB","ovr":84},{"nome":"Gélson Baresi","pos":"CB","ovr":83},{"nome":"Célio Lúcio","pos":"CB","ovr":80},{"nome":"Vitor","pos":"RB","ovr":81},{"nome":"Marcos Teixeira","pos":"RB","ovr":79},{"nome":"Fabinho","pos":"DM","ovr":86},{"nome":"Donizete Oliveira","pos":"DM","ovr":80},{"nome":"Ricardinho","pos":"CM","ovr":88},{"nome":"Donizete Amorim","pos":"CM","ovr":79},{"nome":"Léo","pos":"CM","ovr":79},{"nome":"Palhinha","pos":"AM","ovr":84},{"nome":"Cleisson","pos":"AM","ovr":80},{"nome":"Reinaldo","pos":"LW","ovr":79},{"nome":"Alex Mineiro","pos":"RW","ovr":81},{"nome":"Elivélton","pos":"ST","ovr":91},{"nome":"Marcelo Ramos","pos":"ST","ovr":90}]},{"id":"lib1998","titulo":"Copa Libertadores 1998 (Oitavas de Final)","ano":1998,"competicao":"Libertadores","tecnico":"Levir Culpi","adversario":"Vasco da Gama","fato":"Como atual campeão continental, o Cruzeiro caiu nas oitavas de final para o Vasco da Gama (derrota por 2 a 1 no Rio, empate em 0 a 0 no Mineirão) — o Vasco viria a ser o campeão daquela edição. O Cruzeiro é bicampeão da Libertadores, com os títulos de 1976 e 1997.","jogadores":[{"nome":"Dida","pos":"GK","ovr":90},{"nome":"João Carlos","pos":"LB","ovr":78},{"nome":"Cris","pos":"CB","ovr":82},{"nome":"Marcelo Djian","pos":"CB","ovr":81},{"nome":"Gélson Baresi","pos":"CB","ovr":80},{"nome":"Célio Lúcio","pos":"RB","ovr":79},{"nome":"Fabinho","pos":"DM","ovr":82},{"nome":"Djair","pos":"DM","ovr":79},{"nome":"Ricardinho","pos":"CM","ovr":84},{"nome":"Valdir","pos":"CM","ovr":77},{"nome":"Elivélton","pos":"AM","ovr":80},{"nome":"Muller","pos":"LW","ovr":83},{"nome":"Alex Mineiro","pos":"RW","ovr":79},{"nome":"Gilberto","pos":"RW","ovr":78},{"nome":"Marcelo Ramos","pos":"ST","ovr":84},{"nome":"Alex Alves","pos":"ST","ovr":83},{"nome":"Fábio Júnior","pos":"ST","ovr":79}]},{"id":"cdb2000","titulo":"Copa do Brasil 2000","ano":2000,"competicao":"Copa do Brasil","tecnico":"Marco Aurélio","adversario":"São Paulo","fato":"Virada histórica sobre o São Paulo, com gol de Geovanni faltando pouco tempo para o fim, garantindo o tricampeonato da Copa do Brasil.","jogadores":[{"nome":"André","pos":"GK","ovr":82},{"nome":"Sorín","pos":"LB","ovr":86},{"nome":"Cris","pos":"CB","ovr":82},{"nome":"Cléber","pos":"CB","ovr":81},{"nome":"Rodrigo","pos":"RB","ovr":79},{"nome":"Donizete Oliveira","pos":"DM","ovr":80},{"nome":"Ricardinho","pos":"CM","ovr":87},{"nome":"Marcos Paulo","pos":"CM","ovr":79},{"nome":"Geovanni","pos":"AM","ovr":91},{"nome":"Muller","pos":"LW","ovr":84},{"nome":"Viveros","pos":"RW","ovr":80},{"nome":"Fábio Júnior","pos":"ST","ovr":88},{"nome":"Oséas","pos":"ST","ovr":82}]},{"id":"bra2003","titulo":"Campeonato Brasileiro 2003","ano":2003,"competicao":"Brasileirão","tecnico":"Vanderlei Luxemburgo","adversario":"Combinado da Série A","fato":"Ano da \"Tríplice Coroa\": Cruzeiro foi campeão mineiro, da Copa do Brasil e do Brasileiro no mesmo ano, com Alex e Aristizábal em destaque.","jogadores":[{"nome":"Artur","pos":"GK","ovr":87},{"nome":"Gomes","pos":"GK","ovr":79},{"nome":"Maurinho","pos":"LB","ovr":84},{"nome":"Cris","pos":"CB","ovr":92},{"nome":"Edu Dracena","pos":"CB","ovr":88},{"nome":"Luisão","pos":"CB","ovr":84},{"nome":"Gladstone","pos":"CB","ovr":83},{"nome":"Maicon","pos":"RB","ovr":90},{"nome":"Felipe Melo","pos":"DM","ovr":87},{"nome":"Wendel","pos":"CM","ovr":85},{"nome":"Zinho","pos":"CM","ovr":84},{"nome":"Alex","pos":"AM","ovr":94},{"nome":"Jussiê","pos":"LW","ovr":85},{"nome":"Recife","pos":"RW","ovr":83},{"nome":"Aristizábal","pos":"ST","ovr":91},{"nome":"Deivid","pos":"ST","ovr":88},{"nome":"Alex Alves","pos":"ST","ovr":87},{"nome":"Marcelo Ramos","pos":"ST","ovr":86},{"nome":"Kanu","pos":"ST","ovr":85}]},{"id":"lib2009","titulo":"Copa Libertadores 2009 (Vice)","ano":2009,"competicao":"Libertadores","tecnico":"Adilson Batista","adversario":"Estudiantes (ARG)","fato":"Cruzeiro chegou à sua quarta final de Libertadores, mas foi superado pelo Estudiantes de La Plata e ficou com o vice-campeonato.","jogadores":[{"nome":"Fábio","pos":"GK","ovr":88},{"nome":"Fernandinho","pos":"LB","ovr":77},{"nome":"Gerson Magrão","pos":"LB","ovr":77},{"nome":"Leonardo Silva","pos":"CB","ovr":82},{"nome":"Thiago Heleno","pos":"CB","ovr":82},{"nome":"Jonathan","pos":"RB","ovr":77},{"nome":"Henrique","pos":"CM","ovr":79},{"nome":"Marquinhos Paraná","pos":"CM","ovr":77},{"nome":"Ramires","pos":"AM","ovr":85},{"nome":"Wagner","pos":"AM","ovr":80},{"nome":"Marcelo Moreno","pos":"ST","ovr":84},{"nome":"Kléber","pos":"ST","ovr":81},{"nome":"Wellington Paulista","pos":"ST","ovr":80},{"nome":"Thiago Ribeiro","pos":"ST","ovr":78}]},{"id":"bra2011","titulo":"Campeonato Brasileiro 2011","ano":2011,"competicao":"Brasileirão","tecnico":"Cuca","adversario":"Atlético-MG","fato":"Cruzeiro goleou o rival Atlético-MG por 6 a 1 na última rodada do Brasileirão 2011, resultado que selou o rebaixamento do Galo para a Série B.","jogadores":[{"nome":"Rafael","pos":"GK","ovr":76},{"nome":"Diego Renan","pos":"LB","ovr":81},{"nome":"Léo Renan","pos":"CB","ovr":79},{"nome":"Naldo","pos":"CB","ovr":78},{"nome":"Mauricio Victorino","pos":"CB","ovr":77},{"nome":"Fabrício","pos":"DM","ovr":89},{"nome":"Leandro Guerreiro","pos":"DM","ovr":87},{"nome":"Charles Fernando","pos":"CM","ovr":80},{"nome":"Roger","pos":"AM","ovr":91},{"nome":"Everton","pos":"LW","ovr":86},{"nome":"Anselmo Ramon","pos":"ST","ovr":88},{"nome":"Wellington Paulista","pos":"ST","ovr":84},{"nome":"Ortigoza","pos":"ST","ovr":75},{"nome":"Ernesto Farías","pos":"ST","ovr":73}]},{"id":"bra2013","titulo":"Campeonato Brasileiro 2013","ano":2013,"competicao":"Brasileirão","tecnico":"Marcelo Oliveira","adversario":"Combinado da Série A","fato":"Título conquistado com futebol ofensivo e elenco tão equilibrado que ficou conhecido como \"o time dos 20 titulares\".","jogadores":[{"nome":"Fábio","pos":"GK","ovr":88},{"nome":"Egídio","pos":"LB","ovr":84},{"nome":"Dedé","pos":"CB","ovr":89},{"nome":"Bruno Rodrigo","pos":"CB","ovr":87},{"nome":"Léo Renan","pos":"CB","ovr":82},{"nome":"Manoel","pos":"CB","ovr":80},{"nome":"Nilton","pos":"RB","ovr":85},{"nome":"Mayke","pos":"RB","ovr":82},{"nome":"Ceará","pos":"RB","ovr":79},{"nome":"Lucas Silva","pos":"DM","ovr":87},{"nome":"Henrique","pos":"CM","ovr":80},{"nome":"Luan","pos":"CM","ovr":79},{"nome":"Ricardo Goulart","pos":"AM","ovr":93},{"nome":"Everton Ribeiro","pos":"AM","ovr":86},{"nome":"Diego Souza","pos":"AM","ovr":82},{"nome":"Willian","pos":"LW","ovr":80},{"nome":"Borges","pos":"ST","ovr":84},{"nome":"Júlio Baptista","pos":"ST","ovr":83},{"nome":"Dagoberto","pos":"ST","ovr":81},{"nome":"Wellington Paulista","pos":"ST","ovr":80}]},{"id":"bra2014","titulo":"Campeonato Brasileiro 2014","ano":2014,"competicao":"Brasileirão","tecnico":"Marcelo Oliveira","adversario":"Combinado da Série A","fato":"Bicampeonato brasileiro seguido, com Marcelo Moreno artilheiro e uma das defesas mais sólidas da história recente do clube.","jogadores":[{"nome":"Fábio","pos":"GK","ovr":89},{"nome":"Rafael","pos":"GK","ovr":76},{"nome":"Egídio","pos":"LB","ovr":82},{"nome":"Dedé","pos":"CB","ovr":88},{"nome":"Bruno Rodrigo","pos":"CB","ovr":82},{"nome":"Léo Renan","pos":"CB","ovr":81},{"nome":"Manoel","pos":"CB","ovr":81},{"nome":"Mayke","pos":"RB","ovr":83},{"nome":"Ceará","pos":"RB","ovr":80},{"nome":"Lucas Silva","pos":"DM","ovr":86},{"nome":"Tinga","pos":"DM","ovr":83},{"nome":"Henrique","pos":"CM","ovr":81},{"nome":"Éverton Ribeiro","pos":"AM","ovr":93},{"nome":"Ricardo Goulart","pos":"AM","ovr":92},{"nome":"Júlio Baptista","pos":"AM","ovr":82},{"nome":"Marlone","pos":"LW","ovr":80},{"nome":"Neílton","pos":"LW","ovr":79},{"nome":"Willian","pos":"RW","ovr":85},{"nome":"Marcelo Moreno","pos":"ST","ovr":85},{"nome":"Borges","pos":"ST","ovr":84},{"nome":"Dagoberto","pos":"ST","ovr":82}]},{"id":"cdb2017","titulo":"Copa do Brasil 2017","ano":2017,"competicao":"Copa do Brasil","tecnico":"Mano Menezes","adversario":"Flamengo","fato":"Título conquistado nos pênaltis contra o Flamengo, encerrando um jejum de 14 anos sem taças nacionais para o clube.","jogadores":[{"nome":"Fábio","pos":"GK","ovr":90},{"nome":"Diogo Barbosa","pos":"LB","ovr":82},{"nome":"Murilo","pos":"CB","ovr":83},{"nome":"Manoel","pos":"CB","ovr":80},{"nome":"Léo Renan","pos":"CB","ovr":80},{"nome":"Ezequiel","pos":"RB","ovr":79},{"nome":"Hudson","pos":"DM","ovr":79},{"nome":"Henrique","pos":"CM","ovr":84},{"nome":"Ariel Cabral","pos":"CM","ovr":80},{"nome":"Arrascaeta","pos":"AM","ovr":92},{"nome":"Thiago Neves","pos":"AM","ovr":89},{"nome":"Robinho","pos":"LW","ovr":83},{"nome":"Alisson","pos":"RW","ovr":79},{"nome":"Sassá","pos":"ST","ovr":81},{"nome":"Rafael Sobis","pos":"ST","ovr":80},{"nome":"Raniel","pos":"ST","ovr":79}]},{"id":"cdb2018","titulo":"Copa do Brasil 2018","ano":2018,"competicao":"Copa do Brasil","tecnico":"Mano Menezes","adversario":"Corinthians","fato":"Hexacampeonato da Copa do Brasil, com gols de Thiago Neves, Robinho e Arrascaeta na campanha decisiva contra o Corinthians.","jogadores":[{"nome":"Fábio","pos":"GK","ovr":92},{"nome":"Egídio","pos":"LB","ovr":82},{"nome":"Dedé","pos":"CB","ovr":89},{"nome":"Léo Renan","pos":"CB","ovr":80},{"nome":"Manoel","pos":"CB","ovr":80},{"nome":"Edilson","pos":"RB","ovr":78},{"nome":"Ariel Cabral","pos":"DM","ovr":80},{"nome":"Henrique","pos":"CM","ovr":81},{"nome":"Arrascaeta","pos":"AM","ovr":92},{"nome":"Thiago Neves","pos":"AM","ovr":88},{"nome":"Robinho","pos":"LW","ovr":84},{"nome":"Rafinha","pos":"RW","ovr":81},{"nome":"Barcos","pos":"ST","ovr":85},{"nome":"Sassá","pos":"ST","ovr":80},{"nome":"Rafael Sobis","pos":"ST","ovr":80}]},{"id":"bra1975","titulo":"Campeonato Brasileiro 1975 (Vice)","ano":1975,"competicao":"Brasileirão","tecnico":"Hilton Chaves","adversario":"Internacional","fato":"Cruzeiro caiu na decisão para o Internacional por 1 a 0, em duelo marcado pelo confronto entre o goleiro Manga e os chutes de Nelinho — a mágoa desse vice ajudaria a forjar o título da Libertadores no ano seguinte.","jogadores":[{"nome":"Raul","pos":"GK","ovr":88},{"nome":"Vanderlei","pos":"LB","ovr":81},{"nome":"Darci Menezes","pos":"CB","ovr":84},{"nome":"Morais","pos":"CB","ovr":82},{"nome":"Nelinho","pos":"RB","ovr":90},{"nome":"Wilson Piazza","pos":"DM","ovr":88},{"nome":"Zé Carlos","pos":"CM","ovr":80},{"nome":"Isidoro","pos":"CM","ovr":80},{"nome":"Eduardo Amorim","pos":"AM","ovr":84},{"nome":"Joãozinho","pos":"LW","ovr":90},{"nome":"Roberto Batata","pos":"RW","ovr":85},{"nome":"Palhinha","pos":"ST","ovr":91},{"nome":"Eli Mendes","pos":"ST","ovr":77}]},{"id":"sclib1991","titulo":"Supercopa Libertadores 1991","ano":1991,"competicao":"Supercopa Libertadores","tecnico":"Ênio Andrade","adversario":"River Plate","fato":"Depois de perder o jogo de ida por 2 a 0 na Argentina, o Cruzeiro fez uma virada histórica ao golear o River Plate por 3 a 0 no Mineirão e conquistar a Supercopa Libertadores.","jogadores":[{"nome":"Paulo César","pos":"GK","ovr":86},{"nome":"Nonato","pos":"LB","ovr":82},{"nome":"Adílson","pos":"CB","ovr":81},{"nome":"Paulão","pos":"CB","ovr":80},{"nome":"Jerry","pos":"CB","ovr":75},{"nome":"Célio Gaúcho","pos":"RB","ovr":78},{"nome":"Ademir","pos":"DM","ovr":83},{"nome":"Boiadeiro","pos":"CM","ovr":84},{"nome":"Macalé","pos":"CM","ovr":77},{"nome":"Dinho","pos":"CM","ovr":76},{"nome":"Luís Fernando","pos":"AM","ovr":80},{"nome":"Marquinhos","pos":"LW","ovr":80},{"nome":"Mário Tilico","pos":"RW","ovr":89},{"nome":"Paulinho","pos":"RW","ovr":76},{"nome":"Charles (1991)","pos":"ST","ovr":87}]},{"id":"sclib1992","titulo":"Supercopa Libertadores 1992","ano":1992,"competicao":"Supercopa Libertadores","tecnico":"Jair Pereira","adversario":"Racing (ARG)","fato":"Cruzeiro atropelou o Racing por 4 a 0 no jogo de ida e administrou a derrota por 1 a 0 na volta para faturar o bicampeonato da Supercopa Libertadores, com Renato Gaúcho em grande fase.","jogadores":[{"nome":"Paulo César","pos":"GK","ovr":86},{"nome":"Nonato","pos":"LB","ovr":80},{"nome":"Luizinho","pos":"CB","ovr":82},{"nome":"Célio Lúcio","pos":"CB","ovr":81},{"nome":"Arley Álvares","pos":"CB","ovr":76},{"nome":"Paulo Roberto","pos":"RB","ovr":82},{"nome":"Douglas","pos":"DM","ovr":84},{"nome":"Ademir","pos":"DM","ovr":77},{"nome":"Luís Fernando","pos":"CM","ovr":85},{"nome":"Betinho","pos":"CM","ovr":81},{"nome":"Andrade","pos":"CM","ovr":77},{"nome":"Boiadeiro","pos":"AM","ovr":87},{"nome":"Macalé","pos":"LW","ovr":76},{"nome":"Renato Gaúcho","pos":"RW","ovr":93},{"nome":"Roberto Gaúcho","pos":"ST","ovr":83}]},{"id":"min1968","titulo":"Campeonato Mineiro 1968","ano":1968,"competicao":"Campeonato Mineiro","tecnico":"Orlando Fantoni","adversario":"Villa Nova","fato":"Na fase de ouro que revelou Tostão e Wilson Piazza ao futebol mundial, o Cruzeiro bateu o Villa Nova por 1 a 0, gol de Rodrigues, e faturou o Campeonato Mineiro de 1968.","jogadores":[{"nome":"Raul Plassmann","pos":"GK","ovr":88},{"nome":"Neco","pos":"LB","ovr":83},{"nome":"Darci Menezes","pos":"CB","ovr":84},{"nome":"Procópio","pos":"CB","ovr":81},{"nome":"Pedro Paulo","pos":"RB","ovr":85},{"nome":"Wilson Piazza","pos":"DM","ovr":86},{"nome":"Zé Carlos","pos":"CM","ovr":84},{"nome":"Murilo","pos":"CM","ovr":81},{"nome":"Dirceu Lopes","pos":"AM","ovr":93},{"nome":"Hilton Oliveira","pos":"LW","ovr":83},{"nome":"Rodrigues","pos":"LW","ovr":82},{"nome":"Natal","pos":"RW","ovr":87},{"nome":"Tostão","pos":"ST","ovr":95},{"nome":"Evaldo","pos":"ST","ovr":86},{"nome":"Wilson Almeida","pos":"ST","ovr":79}]},{"id":"min1987","titulo":"Campeonato Mineiro 1987","ano":1987,"competicao":"Campeonato Mineiro","tecnico":"Carlos Alberto Silva","adversario":"Atlético Mineiro","fato":"Depois de uma década sem título estadual oficial, o Cruzeiro superou o rival Atlético-MG na decisão (0 a 0 na ida e 2 a 0 na volta, gol de Careca) e voltou a ser campeão mineiro.","jogadores":[{"nome":"Gomes","pos":"GK","ovr":85},{"nome":"Genílson","pos":"LB","ovr":79},{"nome":"Gilmar Francisco","pos":"CB","ovr":81},{"nome":"Vilmar","pos":"CB","ovr":78},{"nome":"Heraldo","pos":"CB","ovr":76},{"nome":"Balu","pos":"RB","ovr":80},{"nome":"Douglas","pos":"DM","ovr":83},{"nome":"Ademir","pos":"CM","ovr":82},{"nome":"Eduardo","pos":"CM","ovr":78},{"nome":"Careca","pos":"AM","ovr":85},{"nome":"Vanderlei Lima","pos":"RW","ovr":82},{"nome":"Robson","pos":"ST","ovr":88},{"nome":"Ernani","pos":"ST","ovr":86},{"nome":"Édson","pos":"ST","ovr":83},{"nome":"Ademir Patrício","pos":"ST","ovr":77}]},{"id":"sulminas2001","titulo":"Copa Sul-Minas 2001","ano":2001,"competicao":"Copa Sul-Minas","tecnico":"Marco Aurélio","adversario":"Coritiba","fato":"Cruzeiro venceu o Coritiba na decisão e conquistou a Copa Sul-Minas de 2001, torneio que reunia clubes do Sul do Brasil e de Minas Gerais.","jogadores":[{"nome":"Bosco","pos":"GK","ovr":80},{"nome":"Jeferson","pos":"GK","ovr":75},{"nome":"Sorín","pos":"LB","ovr":89},{"nome":"Luisão","pos":"CB","ovr":83},{"nome":"Cris","pos":"CB","ovr":82},{"nome":"Cléber Monteiro","pos":"CB","ovr":80},{"nome":"Maicon","pos":"RB","ovr":76},{"nome":"Marcus Vinícius","pos":"DM","ovr":80},{"nome":"Ricardinho","pos":"CM","ovr":82},{"nome":"Jackson","pos":"CM","ovr":81},{"nome":"Sérgio Manoel","pos":"CM","ovr":78},{"nome":"Marcos Paulo","pos":"CM","ovr":77},{"nome":"Geovanni","pos":"AM","ovr":89},{"nome":"Jorge Wagner","pos":"AM","ovr":88},{"nome":"Adriano Chuva","pos":"RW","ovr":76},{"nome":"Oséas","pos":"ST","ovr":85},{"nome":"Marcelo Ramos","pos":"ST","ovr":80},{"nome":"Alessandro Cambalhota","pos":"ST","ovr":78}]},{"id":"sulminas2002","titulo":"Copa Sul-Minas 2002","ano":2002,"competicao":"Copa Sul-Minas","tecnico":"Ney Franco","adversario":"Athletico Paranaense","fato":"Cruzeiro superou o Athletico Paranaense na decisão e faturou o bicampeonato da Copa Sul-Minas, com Edílson e Ricardinho em destaque no ataque.","jogadores":[{"nome":"Jefferson","pos":"GK","ovr":83},{"nome":"Sorín","pos":"LB","ovr":89},{"nome":"Luisão","pos":"CB","ovr":84},{"nome":"Cris","pos":"CB","ovr":83},{"nome":"Marcelo Batatais","pos":"CB","ovr":81},{"nome":"Maicon","pos":"RB","ovr":80},{"nome":"Ruy","pos":"RB","ovr":80},{"nome":"Fernando Miguel","pos":"DM","ovr":80},{"nome":"Jorge Wagner","pos":"CM","ovr":87},{"nome":"Ricardinho","pos":"AM","ovr":90},{"nome":"Jussiê","pos":"AM","ovr":78},{"nome":"Vander","pos":"LW","ovr":81},{"nome":"Edílson","pos":"RW","ovr":93},{"nome":"Joãozinho","pos":"RW","ovr":76},{"nome":"Fábio Júnior","pos":"ST","ovr":85},{"nome":"Alessandro","pos":"ST","ovr":83},{"nome":"Lúcio","pos":"ST","ovr":78},{"nome":"Leonardo","pos":"ST","ovr":78}]},{"id":"min2019","titulo":"Campeonato Mineiro 2019","ano":2019,"competicao":"Campeonato Mineiro","tecnico":"Mano Menezes","adversario":"Atlético Mineiro","fato":"Cruzeiro venceu o primeiro jogo da decisão por 2 a 1 e segurou o empate por 1 a 1 na volta contra o Atlético-MG, faturando o 39º título mineiro de forma invicta.","jogadores":[{"nome":"Fábio","pos":"GK","ovr":88},{"nome":"Rafael","pos":"GK","ovr":75},{"nome":"Egídio","pos":"LB","ovr":79},{"nome":"Dodô","pos":"LB","ovr":78},{"nome":"Dedé","pos":"CB","ovr":87},{"nome":"Léo Renan","pos":"CB","ovr":80},{"nome":"Cacá","pos":"CB","ovr":77},{"nome":"Orejuela","pos":"RB","ovr":78},{"nome":"Edílson","pos":"RB","ovr":76},{"nome":"Lucas Romero","pos":"DM","ovr":81},{"nome":"Henrique","pos":"DM","ovr":79},{"nome":"Ariel Cabral","pos":"DM","ovr":77},{"nome":"Jadson","pos":"CM","ovr":75},{"nome":"Rodriguinho","pos":"AM","ovr":84},{"nome":"Robinho","pos":"AM","ovr":82},{"nome":"Thiago Neves","pos":"AM","ovr":80},{"nome":"Marquinhos Gabriel","pos":"LW","ovr":80},{"nome":"David","pos":"LW","ovr":77},{"nome":"Pedro Rocha","pos":"RW","ovr":74},{"nome":"Sassá","pos":"ST","ovr":77},{"nome":"Raniel","pos":"ST","ovr":76},{"nome":"Fred","pos":"ST","ovr":75}]}];
+
+const FORMATION_SHAPES = {
+  '4-4-2':   ['GK','LB','CB','CB','RB','LM','CM','CM','RM','ST','ST'],
+  '4-3-3':   ['GK','LB','CB','CB','RB','DM','AM','CM','LW','ST','RW'],
+  '4-2-3-1': ['GK','LB','CB','CB','RB','DM','CM','LM','AM','RM','ST'],
+  '3-5-2':   ['GK','CB','CB','CB','LM','DM','CM','CM','RM','ST','ST'],
+  '5-3-2':   ['GK','LB','CB','CB','CB','RB','DM','CM','CM','ST','ST'],
+};
+const ADJ = {
+  GK:[], LB:['CB'], RB:['CB'], CB:['LB','RB','DM'],
+  DM:['CM','CB'], LM:['LW','CM','LB'], CM:['DM','AM','LM','RM'], RM:['RW','CM','RB'],
+  AM:['CM','LW','RW'],
+  LW:['AM','ST','LM'], RW:['AM','ST','RM'], ST:['LW','RW']
+};
+const POS_LABEL = {GK:'Goleiro',LB:'Lateral-esq.',RB:'Lateral-dir.',CB:'Zagueiro',DM:'Volante',CM:'Meio-campo',AM:'Meia-atacante',LM:'Meia-esq.',RM:'Meia-dir.',LW:'Ponta-esq.',RW:'Ponta-dir.',ST:'Atacante'};
+const SCORER_WEIGHT = {GK:0.02,LB:0.35,RB:0.35,CB:0.3,DM:0.4,CM:0.7,AM:1.3,LM:0.9,RM:0.9,LW:1.4,RW:1.4,ST:1.9};
+
+const TATICAS = {
+  'Retranca':     {emoji:'🧱', label:'Retranca', atk:0.62, leak:0.55, desc:'Time todo atrás da bola. Poucos gols dos dois lados — ótimo pra segurar um resultado.'},
+  'Equilibrado':  {emoji:'⚖️', label:'Equilibrado', atk:1.00, leak:1.00, desc:'Postura neutra, sem exagero pra nenhum lado.'},
+  'Pressao':      {emoji:'🔥', label:'Pressão Alta', atk:1.22, leak:1.28, desc:'Marcação lá na frente, cria muita chance — mas deixa espaço enorme nas costas.'},
+  'ContraAtaque': {emoji:'⚡', label:'Contra-Ataque', atk:0.85, leak:0.78, desc:'Deixa o rival vir e ataca no espaço. Devastador contra quem joga pra frente.'},
+  'JogoDireto':   {emoji:'🎯', label:'Jogo Direto', atk:1.05, leak:0.98, desc:'Bola longa, sem enrolação. Ótimo pra furar linha alta, ruim contra bloqueio baixo.'},
+};
+const TATICA_ORDER = ['Retranca','Equilibrado','Pressao','ContraAtaque','JogoDireto'];
+
+function clampNum(v,min,max){ return Math.min(max, Math.max(min, v)); }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function squadById(id){ return SQUADS.find(s=>s.id===id); }
+function fitLevel(playerPos, slotCat){
+  if(playerPos===slotCat) return 'exact';
+  if((ADJ[slotCat]||[]).includes(playerPos)) return 'adjacent';
+  return 'mismatch';
+}
+function fitWeight(f){ return f==='exact'?1.0:(f==='adjacent'?0.6:0.25); }
+
+// monta a escalação (XI) de um elenco pra uma formação, priorizando encaixe exato e maior overall
+function buildLineup(squad, formationKey){
+  const shape = FORMATION_SHAPES[formationKey];
+  const pool = squad.jogadores.slice();
+  const used = new Set();
+  const xi = [];
+  shape.forEach(cat=>{
+    const candidates = pool
+      .filter(j=> !used.has(j.nome))
+      .map(j=>({...j, fit:fitLevel(j.pos, cat)}))
+      .sort((a,b)=>{
+        const rank = {exact:0, adjacent:1, mismatch:2};
+        if(rank[a.fit]!==rank[b.fit]) return rank[a.fit]-rank[b.fit];
+        return b.ovr - a.ovr;
+      });
+    const chosen = candidates[0];
+    if(chosen){ used.add(chosen.nome); xi.push({...chosen, categoria:cat}); }
+  });
+  const bench = pool.filter(j=>!used.has(j.nome));
+  return {xi, bench};
+}
+
+function computeRating(xi){
+  if(!xi.length) return {rating:60, avgOvr:0, posScore:0};
+  const fitSum = xi.reduce((s,p)=> s + fitWeight(p.fit), 0);
+  const posScore = fitSum/xi.length;
+  const avgOvr = xi.reduce((s,p)=> s + p.ovr, 0)/xi.length;
+  const ovrScore = clampNum((avgOvr-65)/(90-65), 0, 1);
+  const combinedFit = clampNum(0.55*posScore + 0.45*ovrScore, 0, 1);
+  return {rating: Math.round(58 + combinedFit*36), avgOvr, posScore};
+}
+
+// probabilidade de gol por "chance" pra cada lado, considerando rating + tática de cada um
+function matchProbs(ratingA, tatKeyA, ratingB, tatKeyB){
+  const tA = TATICAS[tatKeyA], tB = TATICAS[tatKeyB];
+  const adv = clampNum((ratingA-ratingB)/25, -1.4, 1.4);
+  let baseA = clampNum(0.25 + adv*0.13, 0.06, 0.55);
+  let baseB = clampNum(0.25 - adv*0.13, 0.06, 0.55);
+  let probA = baseA * tA.atk * tB.leak;
+  let probB = baseB * tB.atk * tA.leak;
+  // contra-ataque pune quem joga pra frente
+  if(tatKeyA==='ContraAtaque' && (tatKeyB==='Pressao' || tatKeyB==='Equilibrado' && false)) probA *= 1.35;
+  if(tatKeyB==='ContraAtaque' && (tatKeyA==='Pressao' || tatKeyA==='Equilibrado' && false)) probB *= 1.35;
+  // jogo direto sofre contra retranca (bloqueio baixo neutraliza bola longa), mas rende bem contra pressão (linha alta = espaço nas costas)
+  if(tatKeyA==='JogoDireto'){ if(tatKeyB==='Retranca') probA *= 0.72; else if(tatKeyB==='Pressao') probA *= 1.18; }
+  if(tatKeyB==='JogoDireto'){ if(tatKeyA==='Retranca') probB *= 0.72; else if(tatKeyA==='Pressao') probB *= 1.18; }
+  // retranca x retranca: jogo truncado, reforça ainda mais o travamento
+  if(tatKeyA==='Retranca' && tatKeyB==='Retranca'){ probA *= 0.85; probB *= 0.85; }
+  return {probA: clampNum(probA,0.03,0.68), probB: clampNum(probB,0.03,0.68)};
+}
+
+function randMinute(lo,hi){ return lo + Math.floor(Math.random()*(hi-lo+1)); }
+
+function pickScorer(xi){
+  const pool = xi.map(p=>({nome:p.nome, w: SCORER_WEIGHT[p.categoria]!==undefined?SCORER_WEIGHT[p.categoria]:0.6}));
+  const total = pool.reduce((a,b)=>a+b.w,0);
+  let r = Math.random()*total;
+  for(const p of pool){ if(r<p.w) return p.nome; r-=p.w; }
+  return pool[pool.length-1] ? pool[pool.length-1].nome : '???';
+}
+
+// simula um período (ex: 1º tempo = 4 chances por lado) e retorna gols + eventos
+function simPeriod(ratingA, tatKeyA, xiA, ratingB, tatKeyB, xiB, trials, minLo, minHi){
+  const {probA, probB} = matchProbs(ratingA, tatKeyA, ratingB, tatKeyB);
+  let golsA=0, golsB=0;
+  const events = [];
+  for(let i=0;i<trials;i++){
+    if(Math.random()<probA){ golsA++; events.push({side:'A', min:randMinute(minLo,minHi), scorer:pickScorer(xiA)}); }
+    if(Math.random()<probB){ golsB++; events.push({side:'B', min:randMinute(minLo,minHi), scorer:pickScorer(xiB)}); }
+  }
+  events.sort((a,b)=>a.min-b.min);
+  return {golsA, golsB, events};
+}
+
+// simulação instantânea completa (CPU x CPU, sem intervenção) — usada pros confrontos que não envolvem o jogador
+function simulateCpuMatch(idA, idB){
+  const sqA = squadById(idA), sqB = squadById(idB);
+  const formsA = Object.keys(FORMATION_SHAPES), formsB = Object.keys(FORMATION_SHAPES);
+  const fA = formsA[Math.floor(Math.random()*formsA.length)];
+  const fB = formsB[Math.floor(Math.random()*formsB.length)];
+  const tatKeys = TATICA_ORDER;
+  const tA = tatKeys[Math.floor(Math.random()*tatKeys.length)];
+  const tB = tatKeys[Math.floor(Math.random()*tatKeys.length)];
+  const {xi:xiA} = buildLineup(sqA, fA);
+  const {xi:xiB} = buildLineup(sqB, fB);
+  const rA = computeRating(xiA).rating, rB = computeRating(xiB).rating;
+  const p1 = simPeriod(rA,tA,xiA, rB,tB,xiB, 4, 1,45);
+  const p2 = simPeriod(rA,tA,xiA, rB,tB,xiB, 4, 46,90);
+  let golsA = p1.golsA+p2.golsA, golsB = p1.golsB+p2.golsB;
+  let wentToPens = false, pensScore = null;
+  if(golsA===golsB){
+    const et = simPeriod(rA,tA,xiA, rB,tB,xiB, 2, 91,120);
+    golsA += et.golsA; golsB += et.golsB;
+    if(golsA===golsB){
+      wentToPens = true;
+      const kA = clampNum(0.75+(rA-83)*0.01,0.45,0.9), kB = clampNum(0.75+(rB-83)*0.01,0.45,0.9);
+      let pA=0,pB=0;
+      for(let i=0;i<5;i++){ if(Math.random()<kA)pA++; if(Math.random()<kB)pB++; }
+      while(pA===pB){ if(Math.random()<kA)pA++; if(Math.random()<kB)pB++; }
+      pensScore = `${pA}-${pB}`;
+      if(pA>pB){ golsA++; } else { golsB++; }
+    }
+  }
+  const winner = golsA>golsB ? idA : idB;
+  return {winner, scoreA:golsA, scoreB:golsB, wentToPens, pensScore};
+}
+
+function squadLabel(sq){ return `${sq.ano} · ${sq.titulo}`; }
+
+// ---------------------------------------------------------------
+// ESTADO DO TORNEIO
+// ---------------------------------------------------------------
+let ST = {
+  screen: 'intro',
+  playerSquadId: null,
+  bracket: null,
+  currentRoundKey: null,
+  formation: '4-3-3',
+  tatica: 'Equilibrado',
+  liveMatch: null, // {oppId, xiP, xiO, ratingP, ratingO, half1, half2, subsUsed, extraTime, pens}
+  eliminatedAt: null,
+  champion: false,
+};
+
+const ROUND_SEQ = ['r16','qf','sf','final'];
+const ROUND_TITLE = {r16:'Oitavas de Final', qf:'Quartas de Final', sf:'Semifinal', final:'Final'};
+
+function buildBracket(playerId){
+  const others = shuffle(SQUADS.map(s=>s.id).filter(id=>id!==playerId));
+  const preliminaryIds = others.slice(0,12);
+  const byeIds = others.slice(12);
+  const prelimMatches = [];
+  for(let i=0;i<preliminaryIds.length;i+=2){
+    const a = preliminaryIds[i], b = preliminaryIds[i+1];
+    const res = simulateCpuMatch(a,b);
+    prelimMatches.push({a,b,winner:res.winner,scoreA:res.scoreA,scoreB:res.scoreB,wentToPens:res.wentToPens,pensScore:res.pensScore,pending:false});
+  }
+  const prelimWinners = prelimMatches.map(m=>m.winner);
+  let pool = shuffle([playerId, ...byeIds, ...prelimWinners]);
+  const r16 = [];
+  for(let i=0;i<pool.length;i+=2){
+    const a = pool[i], b = pool[i+1];
+    if(a===playerId || b===playerId){
+      r16.push({a,b,winner:null,pending:true});
+    } else {
+      const res = simulateCpuMatch(a,b);
+      r16.push({a,b,winner:res.winner,scoreA:res.scoreA,scoreB:res.scoreB,wentToPens:res.wentToPens,pensScore:res.pensScore,pending:false});
+    }
+  }
+  return {playerId, prelim:prelimMatches, r16, qf:[], sf:[], final:null};
+}
+
+// resolve a próxima rodada a partir dos vencedores da rodada atual (exceto o confronto do jogador, que fica pendente)
+function advanceRound(bracket, fromKey, toKey){
+  const matches = bracket[fromKey];
+  const winners = matches.map(m=>m.winner);
+  const nextMatches = [];
+  for(let i=0;i<winners.length;i+=2){
+    const a = winners[i], b = winners[i+1];
+    if(a===bracket.playerId || b===bracket.playerId){
+      nextMatches.push({a,b,winner:null,pending:true});
+    } else {
+      const res = simulateCpuMatch(a,b);
+      nextMatches.push({a,b,winner:res.winner,scoreA:res.scoreA,scoreB:res.scoreB,wentToPens:res.wentToPens,pensScore:res.pensScore,pending:false});
+    }
+  }
+  if(toKey==='final'){ bracket.final = nextMatches[0]; }
+  else{ bracket[toKey] = nextMatches; }
+}
+
+function findPlayerMatch(bracket, roundKey){
+  if(roundKey==='final') return bracket.final;
+  return bracket[roundKey].find(m=> m.a===bracket.playerId || m.b===bracket.playerId);
+}
+
+function opponentOf(match, playerId){ return match.a===playerId ? match.b : match.a; }
+
+// ---------------------------------------------------------------
+// RENDER
+// ---------------------------------------------------------------
+const screensEl = () => document.getElementById('screens');
+
+function render(){
+  const el = screensEl();
+  if(ST.screen==='intro') el.innerHTML = renderIntro();
+  else if(ST.screen==='pick') el.innerHTML = renderPick();
+  else if(ST.screen==='bracket-intro') el.innerHTML = renderBracketIntro();
+  else if(ST.screen==='prepare') el.innerHTML = renderPrepare();
+  else if(ST.screen==='match-live') el.innerHTML = renderMatchLive();
+  else if(ST.screen==='round-result') el.innerHTML = renderRoundResult();
+  else if(ST.screen==='bracket-view') el.innerHTML = renderBracketView();
+  else if(ST.screen==='champion') el.innerHTML = renderChampion();
+  else if(ST.screen==='eliminated') el.innerHTML = renderEliminated();
+}
+
+function renderIntro(){
+  return `
+  <div class="card">
+    <h2 class="h">⚔️ Como funciona</h2>
+    <p class="lead">Você escolhe UMA era do Cruzeiro pra comandar como técnico — desde a Taça Brasil de 1966 até o Mineiro de 2019. Sua era entra num mata-mata contra os outros 21 elencos históricos: oitavas, quartas, semi e final. O resto do chaveamento se resolve sozinho nos bastidores.</p>
+    <p class="lead">Antes de cada jogo seu, você escolhe formação e tática — Retranca, Pressão Alta, Contra-Ataque, Jogo Direto ou Equilibrado, cada uma com pontos fortes e fracos entre si. O jogo roda com o relógio correndo, e a qualquer minuto você pode pausar pra trocar de tática (à vontade) ou fazer uma substituição (até 3 por partida). Se empatar, vai pra prorrogação e pênaltis.</p>
+    <div class="btn-row center">
+      <button class="btn" onclick="goTo('pick')">Escolher minha Era</button>
+    </div>
+  </div>`;
+}
+
+function renderPick(){
+  const sorted = SQUADS.slice().sort((a,b)=> a.ano - b.ano);
+  const cards = sorted.map(s=>{
+    const {xi} = buildLineup(s, '4-3-3');
+    const {rating} = computeRating(xi);
+    const sel = ST.playerSquadId===s.id ? ' selected' : '';
+    return `<div class="squad-card${sel}" onclick="pickSquad('${s.id}')">
+      <div class="sc-year">${s.ano}</div>
+      <div class="sc-titulo">${s.titulo}</div>
+      <div class="sc-ovr">Força ${rating}</div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="card">
+    <h2 class="h">Escolha sua Era</h2>
+    <p class="lead">Clique num elenco histórico pra assumir o comando dele no torneio.</p>
+    <div class="squad-grid">${cards}</div>
+    <div class="btn-row center">
+      <button class="btn" ${ST.playerSquadId?'':'disabled'} onclick="confirmSquad()">Confirmar e Gerar Chaveamento</button>
+    </div>
+  </div>`;
+}
+
+function pickSquad(id){ ST.playerSquadId = id; render(); }
+
+function confirmSquad(){
+  if(!ST.playerSquadId) return;
+  ST.bracket = buildBracket(ST.playerSquadId);
+  ST.currentRoundKey = 'r16';
+  ST.eliminatedAt = null;
+  ST.champion = false;
+  ST.screen = 'bracket-intro';
+  render();
+}
+
+function renderBracketIntro(){
+  const sq = squadById(ST.playerSquadId);
+  const m = findPlayerMatch(ST.bracket, 'r16');
+  const oppId = opponentOf(m, ST.playerSquadId);
+  const opp = squadById(oppId);
+  const prelimSummary = ST.bracket.prelim.map(pm=>{
+    const a = squadById(pm.a), b = squadById(pm.b), w = squadById(pm.winner);
+    return `${a.ano} ${pm.scoreA}×${pm.scoreB} ${b.ano} (avança ${w.ano})`;
+  }).join('<br>');
+  return `
+  <div class="card">
+    <h2 class="h">🏆 Chaveamento gerado</h2>
+    <p class="lead">Sua era, <b>${squadLabel(sq)}</b>, entrou direto nas <b>Oitavas de Final</b> — 12 dos outros 21 elencos disputaram uma repescagem pra fechar os 16 classificados. Resultado da repescagem:</p>
+    <p class="lead" style="font-size:.82em;color:#b9c6ee;">${prelimSummary}</p>
+    <p class="lead">Seu primeiro adversário: <b>${squadLabel(opp)}</b>.</p>
+    <div class="btn-row center">
+      <button class="btn" onclick="goTo('prepare')">Preparar meu time</button>
+      <button class="btn ghost" onclick="goTo('bracket-view')">Ver chaveamento completo</button>
+    </div>
+  </div>`;
+}
+
+function goTo(screen){ if(screen==='bracket-view'){ ST.returnScreen = ST.screen; } ST.screen = screen; render(); }
+
+function renderPrepare(){
+  const sq = squadById(ST.playerSquadId);
+  const match = findPlayerMatch(ST.bracket, ST.currentRoundKey);
+  const oppId = opponentOf(match, ST.playerSquadId);
+  const opp = squadById(oppId);
+  const {xi} = buildLineup(sq, ST.formation);
+  const {rating} = computeRating(xi);
+  const oppLineup = buildLineup(opp, '4-3-3');
+  const oppRating = computeRating(oppLineup.xi).rating;
+
+  const formBtns = Object.keys(FORMATION_SHAPES).map(f=>{
+    const sel = ST.formation===f ? ' selected' : '';
+    return `<div class="choice-btn${sel}" onclick="setFormation('${f}')"><div class="cb-label">${f}</div></div>`;
+  }).join('');
+
+  const tatBtns = TATICA_ORDER.map(k=>{
+    const t = TATICAS[k];
+    const sel = ST.tatica===k ? ' selected' : '';
+    return `<div class="choice-btn${sel}" onclick="setTatica('${k}')">
+      <div class="cb-main"><div class="cb-label">${t.emoji} ${t.label}</div><div class="cb-desc">${t.desc}</div></div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="card">
+    <h2 class="h">${ROUND_TITLE[ST.currentRoundKey]}</h2>
+    <div class="opp-preview">
+      <div class="opp-side"><div class="os-year">${sq.ano}</div><div class="os-titulo">${sq.titulo}</div><div class="os-ovr">Você</div></div>
+      <div class="vs">×</div>
+      <div class="opp-side"><div class="os-year">${opp.ano}</div><div class="os-titulo">${opp.titulo}</div><div class="os-ovr">Força ${oppRating}</div></div>
+    </div>
+    <h2 class="h">Formação</h2>
+    <div class="choice-grid">${formBtns}</div>
+    <h2 class="h" style="margin-top:14px;">Tática</h2>
+    <div class="choice-grid tatica">${tatBtns}</div>
+    <div class="rating-preview"><div class="rp-num">${rating}</div><div class="rp-label">força do seu time agora</div></div>
+    <div class="btn-row center">
+      <button class="btn" onclick="startMatch()">Escalar e Jogar</button>
+    </div>
+  </div>`;
+}
+
+function setFormation(f){ ST.formation = f; render(); }
+function setTatica(t){ ST.tatica = t; render(); }
+
+const TICK_MS = 110;
+
+// gera N "janelas de chance" (minutos em que pode sair gol) espalhadas dentro de um intervalo,
+// uma por segmento pra não empilhar tudo no começo ou no fim
+function genCheckpoints(startMin, endMin, n){
+  const span = endMin - startMin;
+  const seg = span / n;
+  const mins = [];
+  for(let i=0;i<n;i++){
+    const lo = startMin + i*seg, hi = startMin + (i+1)*seg;
+    mins.push(Math.max(startMin, Math.min(endMin, Math.round(lo + Math.random()*(hi-lo)))));
+  }
+  return mins;
+}
+
+function startMatch(){
+  const sq = squadById(ST.playerSquadId);
+  const match = findPlayerMatch(ST.bracket, ST.currentRoundKey);
+  const oppId = opponentOf(match, ST.playerSquadId);
+  const opp = squadById(oppId);
+
+  const {xi:xiP, bench:benchP} = buildLineup(sq, ST.formation);
+  const oppForms = Object.keys(FORMATION_SHAPES);
+  const oppForm = oppForms[Math.floor(Math.random()*oppForms.length)];
+  const oppTat = TATICA_ORDER[Math.floor(Math.random()*TATICA_ORDER.length)];
+  const {xi:xiO} = buildLineup(opp, oppForm);
+
+  ST.liveMatch = {
+    oppId, oppTat, xiP, xiO, benchP,
+    tatica: ST.tatica, // tática ao vivo — pode ser trocada a qualquer pausa, não só no intervalo
+    subsUsed: 0,
+    stage: 'reg', // 'reg' -> (se empatar) 'et'
+    minute: 0,
+    checkpoints: genCheckpoints(3, 88, 8),
+    nextCheckpointIdx: 0,
+    tickToken: 0,
+    phase: 'ticking', // ticking -> paused (a qualquer momento) -> ... -> pens -> done
+    halftimeDone: false,
+    pauseReason: null,
+    golsP:0, golsO:0, events:[],
+  };
+  ST.subTargetIndex = null;
+  ST.screen = 'match-live';
+  render();
+  scheduleTick();
+}
+
+function currentRatings(){
+  const lm = ST.liveMatch;
+  const rP = computeRating(lm.xiP).rating;
+  const rO = computeRating(lm.xiO).rating;
+  return {rP, rO};
+}
+
+function scheduleTick(){
+  const lm = ST.liveMatch;
+  if(!lm || lm.phase!=='ticking') return;
+  const myToken = lm.tickToken;
+  setTimeout(()=>{
+    const lm2 = ST.liveMatch;
+    if(!lm2 || lm2.phase!=='ticking' || lm2.tickToken!==myToken) return; // pausado/trocou de tela nesse meio tempo
+    tickMatch();
+  }, TICK_MS);
+}
+
+function resolveCheckpoint(){
+  const lm = ST.liveMatch;
+  const {rP, rO} = currentRatings();
+  const {probA, probB} = matchProbs(rP, lm.tatica, rO, lm.oppTat);
+  const minMark = lm.checkpoints[lm.nextCheckpointIdx];
+  if(Math.random()<probA){ lm.golsP++; lm.events.push({side:'A', min:minMark, scorer:pickScorer(lm.xiP)}); }
+  if(Math.random()<probB){ lm.golsO++; lm.events.push({side:'B', min:minMark, scorer:pickScorer(lm.xiO)}); }
+  lm.events.sort((a,b)=>a.min-b.min);
+  lm.nextCheckpointIdx++;
+}
+
+function tickMatch(){
+  const lm = ST.liveMatch;
+  lm.minute += 1;
+  let scored = false;
+  while(lm.nextCheckpointIdx < lm.checkpoints.length && lm.minute >= lm.checkpoints[lm.nextCheckpointIdx]){
+    resolveCheckpoint();
+    scored = true;
+  }
+
+  // pausa automática no intervalo (fim do 1º tempo) — além da pausa livre a qualquer momento
+  if(lm.stage==='reg' && lm.minute>=45 && !lm.halftimeDone){
+    lm.halftimeDone = true;
+    lm.minute = 45;
+    lm.phase = 'paused';
+    lm.pauseReason = 'halftime';
+    render();
+    return;
+  }
+
+  const maxMinute = lm.stage==='reg' ? 90 : 120;
+  if(lm.minute >= maxMinute){
+    if(lm.stage==='reg'){
+      if(lm.golsP===lm.golsO){
+        lm.stage = 'et';
+        lm.minute = 90;
+        lm.checkpoints = genCheckpoints(93, 118, 2);
+        lm.nextCheckpointIdx = 0;
+        render();
+        scheduleTick();
+        return;
+      }
+      finalizeMatch();
+    } else {
+      if(lm.golsP===lm.golsO){ lm.phase = 'pens'; render(); return; }
+      finalizeMatch();
+    }
+    render();
+    return;
+  }
+
+  if(scored){ render(); } else { updateClockDisplay(); }
+  scheduleTick();
+}
+
+function updateClockDisplay(){
+  const lm = ST.liveMatch;
+  if(!lm || lm.phase!=='ticking') return;
+  const el = document.getElementById('live-clock-text');
+  if(!el) return;
+  const clockTxt = lm.stage==='reg' ? `${lm.minute}'` : `${lm.minute}' (prorrogação)`;
+  el.textContent = `⏱️ Bola rolando — ${clockTxt}`;
+}
+
+function pauseMatch(){
+  const lm = ST.liveMatch;
+  if(!lm || lm.phase!=='ticking') return;
+  lm.phase = 'paused';
+  lm.pauseReason = 'manual';
+  lm.tickToken = (lm.tickToken||0) + 1; // invalida qualquer tick já agendado
+  render();
+}
+
+function resumeMatch(){
+  const lm = ST.liveMatch;
+  if(!lm || lm.phase!=='paused') return;
+  ST.subTargetIndex = null;
+  lm.phase = 'ticking';
+  scheduleTick();
+  render();
+}
+
+function setLiveTatica(k){
+  if(!ST.liveMatch) return;
+  ST.liveMatch.tatica = k;
+  render();
+}
+
+function renderScoreHeader(label){
+  const lm = ST.liveMatch;
+  const sq = squadById(ST.playerSquadId), opp = squadById(lm.oppId);
+  return `
+    <div class="score-panel">
+      <div class="sp-teams">
+        <div class="sp-team">${sq.ano}<br>${sq.titulo}</div>
+        <div class="sp-team">${opp.ano}<br>${opp.titulo}</div>
+      </div>
+      <div class="sp-score">${lm.golsP} × ${lm.golsO}</div>
+      <div class="sp-tag" id="live-clock-text">${label}</div>
+    </div>`;
+}
+
+function renderEvents(){
+  const lm = ST.liveMatch;
+  const sq = squadById(ST.playerSquadId), opp = squadById(lm.oppId);
+  if(!lm.events.length) return '<p class="lead" style="text-align:center;">Nenhum gol até aqui.</p>';
+  return `<div class="events-feed">` + lm.events.map(e=>{
+    const team = e.side==='A' ? sq.titulo : opp.titulo;
+    return `<div class="event-row"><span class="ev-min">${e.min}'</span> ⚽ ${e.scorer} <span style="color:#8892b0;">(${team})</span></div>`;
+  }).join('') + `</div>`;
+}
+
+function renderMatchLive(){
+  const lm = ST.liveMatch;
+  if(!lm) return '';
+
+  if(lm.phase==='pens'){
+    return `<div class="card">${renderScoreHeader('Empate no fim da prorrogação — vai pros pênaltis!')}${renderEvents()}
+      <div class="btn-row center"><button class="btn" onclick="runPenalties()">Bater os pênaltis</button></div>
+    </div>`;
+  }
+  if(lm.phase==='done'){
+    const sq = squadById(ST.playerSquadId), opp = squadById(lm.oppId);
+    const won = lm.finalWinner === ST.playerSquadId;
+    const pensTxt = lm.pensScore ? ` (pênaltis: ${lm.pensScore})` : '';
+    return `<div class="card">
+      ${renderScoreHeader(won ? '✅ Você venceu!' : '❌ Você perdeu')}
+      ${renderEvents()}
+      <p class="lead" style="text-align:center;">Resultado final: ${sq.ano} ${lm.golsP} × ${lm.golsO} ${opp.ano}${pensTxt}</p>
+      <div class="btn-row center">
+        <button class="btn" onclick="finishMatchAndAdvance()">Continuar</button>
+      </div>
+    </div>`;
+  }
+
+  // ticking ou paused
+  const clockTxt = lm.stage==='reg' ? `${lm.minute}'` : `${lm.minute}' (prorrogação)`;
+  let label;
+  if(lm.phase==='paused' && lm.pauseReason==='halftime') label = `🟨 Fim do 1º tempo — ${clockTxt}`;
+  else if(lm.phase==='paused') label = `⏸️ Pausado — ${clockTxt}`;
+  else label = `⏱️ Bola rolando — ${clockTxt}`;
+  const controls = lm.phase==='ticking'
+    ? `<div class="btn-row center"><button class="btn secondary" onclick="pauseMatch()">⏸️ Pausar e fazer mudança</button></div>`
+    : renderChangePanel();
+  return `<div class="card">
+    ${renderScoreHeader(label)}
+    ${renderEvents()}
+    ${controls}
+  </div>`;
+}
+
+function renderChangePanel(){
+  const lm = ST.liveMatch;
+  const isHalftime = lm.pauseReason==='halftime';
+  const tatBtns = TATICA_ORDER.map(k=>{
+    const t = TATICAS[k];
+    const sel = lm.tatica===k ? ' selected' : '';
+    return `<div class="choice-btn${sel}" onclick="setLiveTatica('${k}')">
+      <div class="cb-main"><div class="cb-label">${t.emoji} ${t.label}</div><div class="cb-desc">${t.desc}</div></div>
+    </div>`;
+  }).join('');
+  return `
+    <h2 class="h" style="margin-top:14px;">Mudar a tática agora</h2>
+    <div class="choice-grid tatica">${tatBtns}</div>
+    <h2 class="h" style="margin-top:14px;">Substituições (${lm.subsUsed}/3 usadas)</h2>
+    ${renderBenchPanel()}
+    <div class="btn-row center">
+      <button class="btn" onclick="resumeMatch()">${isHalftime ? '▶️ Continuar pro 2º tempo' : '▶️ Continuar o jogo'}</button>
+    </div>`;
+}
+
+function renderBenchPanel(){
+  const lm = ST.liveMatch;
+  if(lm.subsUsed>=3 || !lm.benchP.length) return '<p class="step-note">Sem mais substituições disponíveis.</p>';
+  const rows = lm.xiP.map((p,i)=>{
+    return `<div class="sub-row"><div class="sr-info"><b>${p.nome}</b> (${POS_LABEL[p.categoria]||p.categoria}, ${p.ovr})</div>
+      <button class="btn small ghost" onclick="openSubFor(${i})">🔄 Substituir</button></div>`;
+  }).join('');
+  let benchChoices = '';
+  if(ST.subTargetIndex!=null){
+    const slot = lm.xiP[ST.subTargetIndex];
+    const options = lm.benchP.slice().sort((a,b)=>b.ovr-a.ovr).map(b=>{
+      const fit = fitLevel(b.pos, slot.categoria);
+      return `<div class="bench-row" onclick="applySub(${ST.subTargetIndex},'${b.nome.replace(/'/g,"\\'")}')">
+        <span>${b.nome} (${b.pos}, ${b.ovr})</span>
+        <span class="fit-tag fit-${fit}">${fit==='exact'?'encaixe':fit==='adjacent'?'ok':'improviso'}</span>
+      </div>`;
+    }).join('');
+    benchChoices = `<p class="step-note">Quem entra no lugar de ${slot.nome}?</p><div class="bench-list">${options}</div>
+      <button class="btn small ghost" style="margin-top:6px;" onclick="ST.subTargetIndex=null;render();">Cancelar</button>`;
+  }
+  return `<div class="sub-list">${rows}</div>${benchChoices}`;
+}
+
+function openSubFor(index){ ST.subTargetIndex = index; render(); }
+
+function applySub(index, benchName){
+  const lm = ST.liveMatch;
+  const benchIdx = lm.benchP.findIndex(b=>b.nome===benchName);
+  if(benchIdx<0) return;
+  const incoming = lm.benchP[benchIdx];
+  const outgoing = lm.xiP[index];
+  const categoria = outgoing.categoria;
+  const fit = fitLevel(incoming.pos, categoria);
+  lm.xiP[index] = {...incoming, categoria, fit};
+  lm.benchP.splice(benchIdx,1);
+  lm.benchP.push({...outgoing, fit:undefined});
+  lm.subsUsed++;
+  ST.subTargetIndex = null;
+  render();
+}
+
+function runPenalties(){
+  const lm = ST.liveMatch;
+  const {rP, rO} = currentRatings();
+  const kP = clampNum(0.75+(rP-83)*0.01,0.45,0.9), kO = clampNum(0.75+(rO-83)*0.01,0.45,0.9);
+  let pA=0,pB=0;
+  for(let i=0;i<5;i++){ if(Math.random()<kP)pA++; if(Math.random()<kO)pB++; }
+  while(pA===pB){ if(Math.random()<kP)pA++; if(Math.random()<kO)pB++; }
+  lm.pensScore = `${pA}-${pB}`;
+  if(pA>pB){ lm.golsP++; } else { lm.golsO++; }
+  finalizeMatch();
+  render();
+}
+
+function finalizeMatch(){
+  const lm = ST.liveMatch;
+  lm.phase = 'done';
+  lm.finalWinner = lm.golsP>lm.golsO ? ST.playerSquadId : lm.oppId;
+}
+
+function finishMatchAndAdvance(){
+  const lm = ST.liveMatch;
+  const match = findPlayerMatch(ST.bracket, ST.currentRoundKey);
+  match.winner = lm.finalWinner;
+  match.scoreA = match.a===ST.playerSquadId ? lm.golsP : lm.golsO;
+  match.scoreB = match.b===ST.playerSquadId ? lm.golsP : lm.golsO;
+  match.wentToPens = !!lm.pensScore;
+  match.pensScore = lm.pensScore || null;
+  match.pending = false;
+
+  if(lm.finalWinner !== ST.playerSquadId){
+    ST.eliminatedAt = ST.currentRoundKey;
+    ST.screen = 'eliminated';
+    render();
+    return;
+  }
+
+  ST.screen = 'round-result';
+  render();
+}
+
+function renderRoundResult(){
+  const sq = squadById(ST.playerSquadId);
+  const roundKey = ST.currentRoundKey;
+  const nextIdx = ROUND_SEQ.indexOf(roundKey)+1;
+  const isLastRound = roundKey==='final';
+  return `
+  <div class="card">
+    <h2 class="h">✅ Classificado!</h2>
+    <p class="lead">${squadLabel(sq)} avançou na ${ROUND_TITLE[roundKey]}.</p>
+    <div class="btn-row center">
+      ${isLastRound ? `<button class="btn" onclick="crownChampion()">Ver resultado final</button>` : `<button class="btn" onclick="proceedToNextRound()">Próxima fase</button>`}
+      <button class="btn ghost" onclick="goTo('bracket-view')">Ver chaveamento</button>
+    </div>
+  </div>`;
+}
+
+function proceedToNextRound(){
+  const idx = ROUND_SEQ.indexOf(ST.currentRoundKey);
+  const fromKey = ROUND_SEQ[idx];
+  const toKey = ROUND_SEQ[idx+1];
+  advanceRound(ST.bracket, fromKey, toKey);
+  ST.currentRoundKey = toKey;
+  ST.screen = 'prepare';
+  render();
+}
+
+function crownChampion(){
+  ST.champion = true;
+  ST.screen = 'champion';
+  render();
+}
+
+function renderBracketView(){
+  const b = ST.bracket;
+  const roundBlock = (title, matches)=>{
+    if(!matches || !matches.length) return '';
+    const rows = matches.map(m=>{
+      const a = squadById(m.a), bb = squadById(m.b);
+      const involvesYou = m.a===b.playerId || m.b===b.playerId;
+      if(m.pending){
+        return `<div class="bracket-match${involvesYou?' you':''}"><div class="bm-side">${a.ano}</div><div class="bm-vs">×</div><div class="bm-side">${bb.ano}</div><div class="bm-pending">a jogar</div></div>`;
+      }
+      const aWin = m.winner===m.a;
+      return `<div class="bracket-match${involvesYou?' you':''}">
+        <div class="bm-side ${aWin?'winner':'loser'}">${a.ano} ${m.scoreA}</div>
+        <div class="bm-vs">×</div>
+        <div class="bm-side ${!aWin?'winner':'loser'}">${m.scoreB} ${bb.ano}</div>
+      </div>`;
+    }).join('');
+    return `<div class="bracket-round"><h3>${title}</h3>${rows}</div>`;
+  };
+  const finalBlock = b.final ? roundBlock('Final', [b.final]) : '';
+  return `
+  <div class="card">
+    <h2 class="h">Chaveamento</h2>
+    ${roundBlock('Repescagem', b.prelim)}
+    ${roundBlock('Oitavas de Final', b.r16)}
+    ${roundBlock('Quartas de Final', b.qf)}
+    ${roundBlock('Semifinal', b.sf)}
+    ${finalBlock}
+    <div class="btn-row center">
+      <button class="btn ghost" onclick="goBackFromBracket()">Voltar</button>
+    </div>
+  </div>`;
+}
+
+function goBackFromBracket(){
+  ST.screen = ST.returnScreen || 'prepare';
+  render();
+}
+
+function renderChampion(){
+  const sq = squadById(ST.playerSquadId);
+  return `
+  <div class="card champion-box">
+    <div class="cb-trophy">🏆</div>
+    <h2>Campeão das Eras!</h2>
+    <p class="cb-sub">${squadLabel(sq)} venceu os outros 21 elencos históricos do Cruzeiro e é o grande campeão da Batalha de Eras.</p>
+    <div class="btn-row center" style="justify-content:center;">
+      <button class="btn" onclick="restartTournament()">Jogar de novo</button>
+      <button class="btn ghost" onclick="goTo('bracket-view')">Ver chaveamento</button>
+    </div>
+  </div>`;
+}
+
+function renderEliminated(){
+  const sq = squadById(ST.playerSquadId);
+  const match = findPlayerMatch(ST.bracket, ST.eliminatedAt);
+  const oppId = opponentOf(match, ST.playerSquadId);
+  const opp = squadById(oppId);
+  return `
+  <div class="card out-box">
+    <div class="ob-emoji">😔</div>
+    <h2>Eliminado na ${ROUND_TITLE[ST.eliminatedAt]}</h2>
+    <p class="lead">${squadLabel(sq)} caiu diante de ${squadLabel(opp)}.</p>
+    <div class="btn-row center" style="justify-content:center;">
+      <button class="btn" onclick="restartTournament()">Tentar de novo</button>
+      <button class="btn ghost" onclick="goTo('bracket-view')">Ver chaveamento</button>
+    </div>
+  </div>`;
+}
+
+function restartTournament(){
+  ST = {
+    screen: 'pick',
+    playerSquadId: null,
+    bracket: null,
+    currentRoundKey: null,
+    formation: '4-3-3',
+    tatica: 'Equilibrado',
+    liveMatch: null,
+    eliminatedAt: null,
+    champion: false,
+  };
+  render();
+}
+
+render();
+  </script>
+</body>
+</html>

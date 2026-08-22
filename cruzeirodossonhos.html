@@ -247,6 +247,7 @@
   .mv-event:last-child{border-bottom:none;}
   .mv-min{color:var(--dourado);font-weight:800;min-width:36px;}
   .mv-assist{color:#aab6e8;font-size:.9em;font-style:italic;}
+  .mv-event.flavor{opacity:.6;font-style:italic;}
 
   /* ---- DISPUTA DE PÊNALTIS ---- */
   .pen-order-label{text-align:center;font-size:.72em;color:#cdd8ff;text-transform:uppercase;letter-spacing:.4px;margin:8px 0 6px;}
@@ -567,18 +568,22 @@ const SQUADS = [
     fato:'Cruzeiro goleou o Santos de Pelé por 6 a 2 na decisão e conquistou seu primeiro título nacional, com a dupla Tostão e Dirceu Lopes.',
     jogadores:[
       {nome:'Raul Plassmann', pos:'GK', ovr:88},
-      {nome:'Neco', pos:'LB', ovr:86},
-      {nome:'William', pos:'CB', ovr:86},
-      {nome:'Procópio', pos:'CB', ovr:83},
-      {nome:'Pedro Paulo', pos:'RB', ovr:86},
+      {nome:'Neco', pos:'LB', ovr:87},
+      {nome:'William', pos:'CB', ovr:87},
+      {nome:'Procópio', pos:'CB', ovr:85},
+      {nome:'Pedro Paulo', pos:'RB', ovr:87},
       {nome:'Wilson Piazza', pos:'DM', ovr:85},
-      {nome:'Zé Carlos', pos:'CM', ovr:78},
-      {nome:'Marco Antônio', pos:'CM', ovr:76},
+      {nome:'Zé Carlos', pos:'CM', ovr:82},
+      {nome:'Marco Antônio', pos:'CM', ovr:81},
       {nome:'Dirceu Lopes', pos:'AM', ovr:95},
       {nome:'Hilton Oliveira', pos:'LW', ovr:83},
       {nome:'Natal', pos:'RW', ovr:88},
       {nome:'Tostão', pos:'ST', ovr:94},
       {nome:'Evaldo', pos:'ST', ovr:90},
+      {nome:'Tonho', pos:'GK', ovr:78},
+      {nome:'Hilton Chaves', pos:'CB', ovr:76},
+      {nome:'Dalmar', pos:'LW', ovr:75},
+      {nome:'Wilson Almeida', pos:'ST', ovr:74},
     ]
   },
   {
@@ -587,21 +592,21 @@ const SQUADS = [
     fato:'Primeiro título continental do Cruzeiro e do futebol mineiro, decidido em partida extra após 2 vitórias a 1 no confronto direto contra o River Plate.',
     jogadores:[
       {nome:'Raul', pos:'GK', ovr:84},
-      {nome:'Vanderlei', pos:'LB', ovr:82},
-      {nome:'Moraes', pos:'CB', ovr:82},
-      {nome:'Darcy Menezes', pos:'CB', ovr:81},
-      {nome:'Vieira', pos:'CB', ovr:79},
+      {nome:'Vanderlei', pos:'LB', ovr:85},
+      {nome:'Moraes', pos:'CB', ovr:85},
+      {nome:'Darcy Menezes', pos:'CB', ovr:84},
+      {nome:'Vieira', pos:'CB', ovr:83},
       {nome:'Nelinho', pos:'RB', ovr:90},
       {nome:'Piazza', pos:'DM', ovr:89},
-      {nome:'Zé Carlos', pos:'CM', ovr:86},
-      {nome:'Ronaldo Drumond', pos:'CM', ovr:79},
-      {nome:'Osíris', pos:'CM', ovr:79},
+      {nome:'Zé Carlos', pos:'CM', ovr:87},
+      {nome:'Ronaldo Drumond', pos:'CM', ovr:83},
+      {nome:'Osíris', pos:'CM', ovr:83},
       {nome:'Dirceu Lopes', pos:'AM', ovr:89},
-      {nome:'Eduardo', pos:'AM', ovr:84},
-      {nome:'Joãozinho', pos:'LW', ovr:92},
-      {nome:'Jairzinho', pos:'RW', ovr:90},
-      {nome:'Palhinha', pos:'ST', ovr:91},
-      {nome:'Roberto Batata', pos:'ST', ovr:85},
+      {nome:'Eduardo', pos:'AM', ovr:84, flex:['CM']},
+      {nome:'Joãozinho', pos:'LW', ovr:92, flex:['RW']},
+      {nome:'Jairzinho', pos:'RW', ovr:90, flex:['LW']},
+      {nome:'Palhinha', pos:'ST', ovr:91, flex:['AM']},
+      {nome:'Roberto Batata', pos:'ST', ovr:85, flex:['RW']},
     ]
   },
   {
@@ -610,17 +615,19 @@ const SQUADS = [
     fato:'Primeira Copa do Brasil da história do clube, vencida sobre o Grêmio por 2 a 1. O elenco campeão já contava com um garoto de 16 anos: Ronaldo Fenômeno.',
     jogadores:[
       {nome:'Paulo César', pos:'GK', ovr:81},
-      {nome:'Nonato', pos:'LB', ovr:86},
-      {nome:'Paulo Roberto', pos:'CB', ovr:81},
-      {nome:'Célio Lúcio', pos:'CB', ovr:80},
-      {nome:'Róbson', pos:'RB', ovr:79},
-      {nome:'Ademir', pos:'DM', ovr:79},
-      {nome:'Rogério', pos:'CM', ovr:78},
+      {nome:'Nonato', pos:'LB', ovr:87},
+      {nome:'Paulo Roberto', pos:'CB', ovr:84, flex:['RB']},
+      {nome:'Célio Lúcio', pos:'CB', ovr:84, flex:['RB']},
+      {nome:'Róbson', pos:'RB', ovr:83},
+      {nome:'Ademir', pos:'DM', ovr:79, flex:['CM']},
+      {nome:'Rogério', pos:'CM', ovr:82},
       {nome:'Éder Aleixo', pos:'AM', ovr:80},
       {nome:'Edenílson', pos:'LW', ovr:80},
-      {nome:'Roberto Gaúcho', pos:'RW', ovr:91},
+      {nome:'Roberto Gaúcho', pos:'RW', ovr:91, flex:['ST']},
       {nome:'Ronaldo Fenômeno', pos:'ST', ovr:89},
-      {nome:'Cleisson', pos:'ST', ovr:81},
+      {nome:'Cleisson', pos:'ST', ovr:81, flex:['AM']},
+      {nome:'Douglas', pos:'DM', ovr:82},
+      {nome:'Boiadeiro', pos:'CM', ovr:84, flex:['AM']},
     ]
   },
   {
@@ -630,18 +637,18 @@ const SQUADS = [
     jogadores:[
       {nome:'Dida', pos:'GK', ovr:90},
       {nome:'Jean', pos:'GK', ovr:76},
-      {nome:'Nonato', pos:'LB', ovr:85},
-      {nome:'Gélson Baresi', pos:'CB', ovr:82},
-      {nome:'Célio Lúcio', pos:'CB', ovr:80},
-      {nome:'Vitor', pos:'RB', ovr:80},
+      {nome:'Nonato', pos:'LB', ovr:87},
+      {nome:'Gélson Baresi', pos:'CB', ovr:85},
+      {nome:'Célio Lúcio', pos:'CB', ovr:84, flex:['RB']},
+      {nome:'Vitor', pos:'RB', ovr:84},
       {nome:'Fabinho', pos:'DM', ovr:84},
-      {nome:'Ricardinho', pos:'CM', ovr:84},
-      {nome:'Ueslei', pos:'CM', ovr:79},
-      {nome:'Palhinha', pos:'AM', ovr:83},
-      {nome:'Cleisson', pos:'AM', ovr:81},
+      {nome:'Ricardinho', pos:'CM', ovr:86, flex:['AM']},
+      {nome:'Ueslei', pos:'CM', ovr:83},
+      {nome:'Palhinha', pos:'AM', ovr:83, flex:['ST']},
+      {nome:'Cleisson', pos:'AM', ovr:81, flex:['ST']},
       {nome:'Luis Fernando', pos:'LW', ovr:79},
       {nome:'Marcelo Ramos', pos:'ST', ovr:91},
-      {nome:'Roberto Gaúcho', pos:'ST', ovr:88},
+      {nome:'Roberto Gaúcho', pos:'ST', ovr:88, flex:['RW']},
     ]
   },
   {
@@ -651,22 +658,22 @@ const SQUADS = [
     jogadores:[
       {nome:'Dida', pos:'GK', ovr:92},
       {nome:'Jean', pos:'GK', ovr:77},
-      {nome:'Nonato', pos:'LB', ovr:85},
-      {nome:'Wilson Gottardo', pos:'CB', ovr:84},
-      {nome:'Gélson Baresi', pos:'CB', ovr:83},
-      {nome:'Célio Lúcio', pos:'CB', ovr:80},
-      {nome:'Vitor', pos:'RB', ovr:81},
-      {nome:'Marcos Teixeira', pos:'RB', ovr:79},
+      {nome:'Nonato', pos:'LB', ovr:87},
+      {nome:'Wilson Gottardo', pos:'CB', ovr:86},
+      {nome:'Gélson Baresi', pos:'CB', ovr:85},
+      {nome:'Célio Lúcio', pos:'CB', ovr:84, flex:['RB']},
+      {nome:'Vitor', pos:'RB', ovr:84},
+      {nome:'Marcos Teixeira', pos:'RB', ovr:83},
       {nome:'Fabinho', pos:'DM', ovr:86},
       {nome:'Donizete Oliveira', pos:'DM', ovr:80},
-      {nome:'Ricardinho', pos:'CM', ovr:88},
-      {nome:'Donizete Amorim', pos:'CM', ovr:79},
-      {nome:'Léo', pos:'CM', ovr:79},
-      {nome:'Palhinha', pos:'AM', ovr:84},
-      {nome:'Cleisson', pos:'AM', ovr:80},
+      {nome:'Ricardinho', pos:'CM', ovr:89, flex:['AM']},
+      {nome:'Donizete Amorim', pos:'CM', ovr:83},
+      {nome:'Léo', pos:'CM', ovr:83},
+      {nome:'Palhinha', pos:'AM', ovr:84, flex:['ST']},
+      {nome:'Cleisson', pos:'AM', ovr:80, flex:['ST']},
       {nome:'Reinaldo', pos:'LW', ovr:79},
       {nome:'Alex Mineiro', pos:'RW', ovr:81},
-      {nome:'Elivélton', pos:'ST', ovr:91},
+      {nome:'Elivélton', pos:'ST', ovr:91, flex:['AM']},
       {nome:'Marcelo Ramos', pos:'ST', ovr:90},
     ]
   },
@@ -676,16 +683,16 @@ const SQUADS = [
     fato:'Como atual campeão continental, o Cruzeiro caiu nas oitavas de final para o Vasco da Gama (derrota por 2 a 1 no Rio, empate em 0 a 0 no Mineirão) — o Vasco viria a ser o campeão daquela edição. O Cruzeiro é bicampeão da Libertadores, com os títulos de 1976 e 1997.',
     jogadores:[
       {nome:'Dida', pos:'GK', ovr:90},
-      {nome:'João Carlos', pos:'LB', ovr:78},
-      {nome:'Cris', pos:'CB', ovr:82},
-      {nome:'Marcelo Djian', pos:'CB', ovr:81},
-      {nome:'Gélson Baresi', pos:'CB', ovr:80},
-      {nome:'Célio Lúcio', pos:'RB', ovr:79},
+      {nome:'João Carlos', pos:'LB', ovr:82},
+      {nome:'Cris', pos:'CB', ovr:85},
+      {nome:'Marcelo Djian', pos:'CB', ovr:84},
+      {nome:'Gélson Baresi', pos:'CB', ovr:84},
+      {nome:'Célio Lúcio', pos:'RB', ovr:83, flex:['CB']},
       {nome:'Fabinho', pos:'DM', ovr:82},
       {nome:'Djair', pos:'DM', ovr:79},
-      {nome:'Ricardinho', pos:'CM', ovr:84},
-      {nome:'Valdir', pos:'CM', ovr:77},
-      {nome:'Elivélton', pos:'AM', ovr:80},
+      {nome:'Ricardinho', pos:'CM', ovr:86, flex:['AM']},
+      {nome:'Valdir', pos:'CM', ovr:82},
+      {nome:'Elivélton', pos:'AM', ovr:80, flex:['ST']},
       {nome:'Muller', pos:'LW', ovr:83},
       {nome:'Alex Mineiro', pos:'RW', ovr:79},
       {nome:'Gilberto', pos:'RW', ovr:78},
@@ -700,13 +707,13 @@ const SQUADS = [
     fato:'Virada histórica sobre o São Paulo, com gol de Geovanni faltando pouco tempo para o fim, garantindo o tricampeonato da Copa do Brasil.',
     jogadores:[
       {nome:'André', pos:'GK', ovr:82},
-      {nome:'Sorín', pos:'LB', ovr:86},
-      {nome:'Cris', pos:'CB', ovr:82},
-      {nome:'Cléber', pos:'CB', ovr:81},
-      {nome:'Rodrigo', pos:'RB', ovr:79},
+      {nome:'Sorín', pos:'LB', ovr:87},
+      {nome:'Cris', pos:'CB', ovr:85},
+      {nome:'Cléber', pos:'CB', ovr:84},
+      {nome:'Rodrigo', pos:'RB', ovr:83},
       {nome:'Donizete Oliveira', pos:'DM', ovr:80},
-      {nome:'Ricardinho', pos:'CM', ovr:87},
-      {nome:'Marcos Paulo', pos:'CM', ovr:79},
+      {nome:'Ricardinho', pos:'CM', ovr:88, flex:['AM']},
+      {nome:'Marcos Paulo', pos:'CM', ovr:83},
       {nome:'Geovanni', pos:'AM', ovr:91},
       {nome:'Muller', pos:'LW', ovr:84},
       {nome:'Viveros', pos:'RW', ovr:80},
@@ -721,17 +728,17 @@ const SQUADS = [
     jogadores:[
       {nome:'Artur', pos:'GK', ovr:87},
       {nome:'Gomes', pos:'GK', ovr:79},
-      {nome:'Maurinho', pos:'LB', ovr:84},
+      {nome:'Maurinho', pos:'LB', ovr:86},
       {nome:'Cris', pos:'CB', ovr:92},
-      {nome:'Edu Dracena', pos:'CB', ovr:88},
-      {nome:'Luisão', pos:'CB', ovr:84},
-      {nome:'Gladstone', pos:'CB', ovr:83},
+      {nome:'Edu Dracena', pos:'CB', ovr:89},
+      {nome:'Luisão', pos:'CB', ovr:86},
+      {nome:'Gladstone', pos:'CB', ovr:85},
       {nome:'Maicon', pos:'RB', ovr:90},
       {nome:'Felipe Melo', pos:'DM', ovr:87},
-      {nome:'Wendel', pos:'CM', ovr:85},
-      {nome:'Zinho', pos:'CM', ovr:84},
+      {nome:'Wendel', pos:'CM', ovr:87},
+      {nome:'Zinho', pos:'CM', ovr:86},
       {nome:'Alex', pos:'AM', ovr:94},
-      {nome:'Jussiê', pos:'LW', ovr:85},
+      {nome:'Jussiê', pos:'LW', ovr:85, flex:['AM']},
       {nome:'Recife', pos:'RW', ovr:83},
       {nome:'Aristizábal', pos:'ST', ovr:91},
       {nome:'Deivid', pos:'ST', ovr:88},
@@ -746,13 +753,13 @@ const SQUADS = [
     fato:'Cruzeiro chegou à sua quarta final de Libertadores, mas foi superado pelo Estudiantes de La Plata e ficou com o vice-campeonato.',
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:88},
-      {nome:'Fernandinho', pos:'LB', ovr:77},
-      {nome:'Gerson Magrão', pos:'LB', ovr:77},
-      {nome:'Leonardo Silva', pos:'CB', ovr:82},
-      {nome:'Thiago Heleno', pos:'CB', ovr:82},
-      {nome:'Jonathan', pos:'RB', ovr:77},
-      {nome:'Henrique', pos:'CM', ovr:79},
-      {nome:'Marquinhos Paraná', pos:'CM', ovr:77},
+      {nome:'Fernandinho', pos:'LB', ovr:82},
+      {nome:'Gerson Magrão', pos:'LB', ovr:82},
+      {nome:'Leonardo Silva', pos:'CB', ovr:85},
+      {nome:'Thiago Heleno', pos:'CB', ovr:85},
+      {nome:'Jonathan', pos:'RB', ovr:82},
+      {nome:'Henrique', pos:'CM', ovr:83, flex:['DM']},
+      {nome:'Marquinhos Paraná', pos:'CM', ovr:82},
       {nome:'Ramires', pos:'AM', ovr:85},
       {nome:'Wagner', pos:'AM', ovr:80},
       {nome:'Marcelo Moreno', pos:'ST', ovr:84},
@@ -767,13 +774,13 @@ const SQUADS = [
     fato:'Cruzeiro goleou o rival Atlético-MG por 6 a 1 na última rodada do Brasileirão 2011, resultado que selou o rebaixamento do Galo para a Série B.',
     jogadores:[
       {nome:'Rafael', pos:'GK', ovr:76},
-      {nome:'Diego Renan', pos:'LB', ovr:81},
-      {nome:'Léo Renan', pos:'CB', ovr:79},
-      {nome:'Naldo', pos:'CB', ovr:78},
-      {nome:'Mauricio Victorino', pos:'CB', ovr:77},
+      {nome:'Diego Renan', pos:'LB', ovr:84},
+      {nome:'Léo Renan', pos:'CB', ovr:83},
+      {nome:'Naldo', pos:'CB', ovr:82},
+      {nome:'Mauricio Victorino', pos:'CB', ovr:82},
       {nome:'Fabrício', pos:'DM', ovr:89},
       {nome:'Leandro Guerreiro', pos:'DM', ovr:87},
-      {nome:'Charles Fernando', pos:'CM', ovr:80},
+      {nome:'Charles Fernando', pos:'CM', ovr:84},
       {nome:'Roger', pos:'AM', ovr:91},
       {nome:'Everton', pos:'LW', ovr:86},
       {nome:'Anselmo Ramon', pos:'ST', ovr:88},
@@ -788,23 +795,23 @@ const SQUADS = [
     fato:'Título conquistado com futebol ofensivo e elenco tão equilibrado que ficou conhecido como "o time dos 20 titulares".',
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:88},
-      {nome:'Egídio', pos:'LB', ovr:84},
+      {nome:'Egídio', pos:'LB', ovr:86},
       {nome:'Dedé', pos:'CB', ovr:89},
-      {nome:'Bruno Rodrigo', pos:'CB', ovr:87},
-      {nome:'Léo Renan', pos:'CB', ovr:82},
-      {nome:'Manoel', pos:'CB', ovr:80},
-      {nome:'Nilton', pos:'RB', ovr:85},
-      {nome:'Mayke', pos:'RB', ovr:82},
-      {nome:'Ceará', pos:'RB', ovr:79},
+      {nome:'Bruno Rodrigo', pos:'CB', ovr:88},
+      {nome:'Léo Renan', pos:'CB', ovr:85},
+      {nome:'Manoel', pos:'CB', ovr:84},
+      {nome:'Nilton', pos:'RB', ovr:87},
+      {nome:'Mayke', pos:'RB', ovr:85},
+      {nome:'Ceará', pos:'RB', ovr:83},
       {nome:'Lucas Silva', pos:'DM', ovr:87},
-      {nome:'Henrique', pos:'CM', ovr:80},
-      {nome:'Luan', pos:'CM', ovr:79},
+      {nome:'Henrique', pos:'CM', ovr:84, flex:['DM']},
+      {nome:'Luan', pos:'CM', ovr:83},
       {nome:'Ricardo Goulart', pos:'AM', ovr:93},
-      {nome:'Everton Ribeiro', pos:'AM', ovr:86},
+      {nome:'Éverton Ribeiro', pos:'AM', ovr:86, flex:['LW','RW']},
       {nome:'Diego Souza', pos:'AM', ovr:82},
-      {nome:'Willian', pos:'LW', ovr:80},
+      {nome:'Willian', pos:'LW', ovr:80, flex:['RW']},
       {nome:'Borges', pos:'ST', ovr:84},
-      {nome:'Júlio Baptista', pos:'ST', ovr:83},
+      {nome:'Júlio Baptista', pos:'ST', ovr:83, flex:['AM']},
       {nome:'Dagoberto', pos:'ST', ovr:81},
       {nome:'Wellington Paulista', pos:'ST', ovr:80},
     ]
@@ -816,22 +823,22 @@ const SQUADS = [
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:89},
       {nome:'Rafael', pos:'GK', ovr:76},
-      {nome:'Egídio', pos:'LB', ovr:82},
-      {nome:'Dedé', pos:'CB', ovr:88},
-      {nome:'Bruno Rodrigo', pos:'CB', ovr:82},
-      {nome:'Léo Renan', pos:'CB', ovr:81},
-      {nome:'Manoel', pos:'CB', ovr:81},
-      {nome:'Mayke', pos:'RB', ovr:83},
-      {nome:'Ceará', pos:'RB', ovr:80},
+      {nome:'Egídio', pos:'LB', ovr:85},
+      {nome:'Dedé', pos:'CB', ovr:89},
+      {nome:'Bruno Rodrigo', pos:'CB', ovr:85},
+      {nome:'Léo Renan', pos:'CB', ovr:84},
+      {nome:'Manoel', pos:'CB', ovr:84},
+      {nome:'Mayke', pos:'RB', ovr:85},
+      {nome:'Ceará', pos:'RB', ovr:84},
       {nome:'Lucas Silva', pos:'DM', ovr:86},
       {nome:'Tinga', pos:'DM', ovr:83},
-      {nome:'Henrique', pos:'CM', ovr:81},
-      {nome:'Éverton Ribeiro', pos:'AM', ovr:93},
+      {nome:'Henrique', pos:'CM', ovr:84, flex:['DM']},
+      {nome:'Éverton Ribeiro', pos:'AM', ovr:93, flex:['LW','RW']},
       {nome:'Ricardo Goulart', pos:'AM', ovr:92},
-      {nome:'Júlio Baptista', pos:'AM', ovr:82},
+      {nome:'Júlio Baptista', pos:'AM', ovr:82, flex:['ST']},
       {nome:'Marlone', pos:'LW', ovr:80},
       {nome:'Neílton', pos:'LW', ovr:79},
-      {nome:'Willian', pos:'RW', ovr:85},
+      {nome:'Willian', pos:'RW', ovr:85, flex:['LW']},
       {nome:'Marcelo Moreno', pos:'ST', ovr:85},
       {nome:'Borges', pos:'ST', ovr:84},
       {nome:'Dagoberto', pos:'ST', ovr:82},
@@ -843,17 +850,17 @@ const SQUADS = [
     fato:'Título conquistado nos pênaltis contra o Flamengo, encerrando um jejum de 14 anos sem taças nacionais para o clube.',
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:90},
-      {nome:'Diogo Barbosa', pos:'LB', ovr:82},
-      {nome:'Murilo', pos:'CB', ovr:83},
-      {nome:'Manoel', pos:'CB', ovr:80},
-      {nome:'Léo Renan', pos:'CB', ovr:80},
-      {nome:'Ezequiel', pos:'RB', ovr:79},
+      {nome:'Diogo Barbosa', pos:'LB', ovr:85},
+      {nome:'Murilo Cerqueira', pos:'CB', ovr:85},
+      {nome:'Manoel', pos:'CB', ovr:84},
+      {nome:'Léo Renan', pos:'CB', ovr:84},
+      {nome:'Ezequiel', pos:'RB', ovr:83},
       {nome:'Hudson', pos:'DM', ovr:79},
-      {nome:'Henrique', pos:'CM', ovr:84},
-      {nome:'Ariel Cabral', pos:'CM', ovr:80},
+      {nome:'Henrique', pos:'CM', ovr:86, flex:['DM']},
+      {nome:'Ariel Cabral', pos:'CM', ovr:84, flex:['DM']},
       {nome:'Arrascaeta', pos:'AM', ovr:92},
       {nome:'Thiago Neves', pos:'AM', ovr:89},
-      {nome:'Robinho', pos:'LW', ovr:83},
+      {nome:'Robinho', pos:'LW', ovr:83, flex:['AM']},
       {nome:'Alisson', pos:'RW', ovr:79},
       {nome:'Sassá', pos:'ST', ovr:81},
       {nome:'Rafael Sobis', pos:'ST', ovr:80},
@@ -866,16 +873,16 @@ const SQUADS = [
     fato:'Hexacampeonato da Copa do Brasil, com gols de Thiago Neves, Robinho e Arrascaeta na campanha decisiva contra o Corinthians.',
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:92},
-      {nome:'Egídio', pos:'LB', ovr:82},
+      {nome:'Egídio', pos:'LB', ovr:85},
       {nome:'Dedé', pos:'CB', ovr:89},
-      {nome:'Léo Renan', pos:'CB', ovr:80},
-      {nome:'Manoel', pos:'CB', ovr:80},
-      {nome:'Edilson', pos:'RB', ovr:78},
-      {nome:'Ariel Cabral', pos:'DM', ovr:80},
-      {nome:'Henrique', pos:'CM', ovr:81},
+      {nome:'Léo Renan', pos:'CB', ovr:84},
+      {nome:'Manoel', pos:'CB', ovr:84},
+      {nome:'Edilson', pos:'RB', ovr:82},
+      {nome:'Ariel Cabral', pos:'DM', ovr:80, flex:['CM']},
+      {nome:'Henrique', pos:'CM', ovr:84, flex:['DM']},
       {nome:'Arrascaeta', pos:'AM', ovr:92},
       {nome:'Thiago Neves', pos:'AM', ovr:88},
-      {nome:'Robinho', pos:'LW', ovr:84},
+      {nome:'Robinho', pos:'LW', ovr:84, flex:['AM']},
       {nome:'Rafinha', pos:'RW', ovr:81},
       {nome:'Barcos', pos:'ST', ovr:85},
       {nome:'Sassá', pos:'ST', ovr:80},
@@ -888,18 +895,21 @@ const SQUADS = [
     fato:'Cruzeiro caiu na decisão para o Internacional por 1 a 0, em duelo marcado pelo confronto entre o goleiro Manga e os chutes de Nelinho — a mágoa desse vice ajudaria a forjar o título da Libertadores no ano seguinte.',
     jogadores:[
       {nome:'Raul', pos:'GK', ovr:88},
-      {nome:'Vanderlei', pos:'LB', ovr:81},
-      {nome:'Darci Menezes', pos:'CB', ovr:84},
-      {nome:'Morais', pos:'CB', ovr:82},
+      {nome:'Vanderlei', pos:'LB', ovr:84},
+      {nome:'Darci Menezes', pos:'CB', ovr:86},
+      {nome:'Morais', pos:'CB', ovr:85},
       {nome:'Nelinho', pos:'RB', ovr:90},
       {nome:'Wilson Piazza', pos:'DM', ovr:88},
-      {nome:'Zé Carlos', pos:'CM', ovr:80},
-      {nome:'Isidoro', pos:'CM', ovr:80},
+      {nome:'Zé Carlos', pos:'CM', ovr:84},
+      {nome:'Isidoro', pos:'CM', ovr:84},
       {nome:'Eduardo Amorim', pos:'AM', ovr:84},
-      {nome:'Joãozinho', pos:'LW', ovr:90},
-      {nome:'Roberto Batata', pos:'RW', ovr:85},
-      {nome:'Palhinha', pos:'ST', ovr:91},
+      {nome:'Joãozinho', pos:'LW', ovr:90, flex:['RW']},
+      {nome:'Roberto Batata', pos:'RW', ovr:85, flex:['ST']},
+      {nome:'Palhinha', pos:'ST', ovr:91, flex:['AM']},
       {nome:'Eli Mendes', pos:'ST', ovr:77},
+      {nome:'Dirceu Lopes', pos:'AM', ovr:84},
+      {nome:'Jésum', pos:'AM', ovr:76},
+      {nome:'Roberto César', pos:'ST', ovr:74},
     ]
   },
   {
@@ -908,16 +918,16 @@ const SQUADS = [
     fato:'Depois de perder o jogo de ida por 2 a 0 na Argentina, o Cruzeiro fez uma virada histórica ao golear o River Plate por 3 a 0 no Mineirão e conquistar a Supercopa Libertadores.',
     jogadores:[
       {nome:'Paulo César', pos:'GK', ovr:86},
-      {nome:'Nonato', pos:'LB', ovr:82},
-      {nome:'Adílson', pos:'CB', ovr:81},
-      {nome:'Paulão', pos:'CB', ovr:80},
-      {nome:'Jerry', pos:'CB', ovr:75},
-      {nome:'Célio Gaúcho', pos:'RB', ovr:78},
-      {nome:'Ademir', pos:'DM', ovr:83},
-      {nome:'Boiadeiro', pos:'CM', ovr:84},
-      {nome:'Macalé', pos:'CM', ovr:77},
-      {nome:'Dinho', pos:'CM', ovr:76},
-      {nome:'Luís Fernando', pos:'AM', ovr:80},
+      {nome:'Nonato', pos:'LB', ovr:85},
+      {nome:'Adílson', pos:'CB', ovr:84},
+      {nome:'Paulão', pos:'CB', ovr:84},
+      {nome:'Jerry', pos:'CB', ovr:80},
+      {nome:'Célio Gaúcho', pos:'RB', ovr:82},
+      {nome:'Ademir', pos:'DM', ovr:83, flex:['CM']},
+      {nome:'Boiadeiro', pos:'CM', ovr:86, flex:['AM']},
+      {nome:'Macalé', pos:'CM', ovr:82, flex:['LW']},
+      {nome:'Dinho', pos:'CM', ovr:81},
+      {nome:'Luís Fernando', pos:'AM', ovr:80, flex:['CM']},
       {nome:'Marquinhos', pos:'LW', ovr:80},
       {nome:'Mário Tilico', pos:'RW', ovr:89},
       {nome:'Paulinho', pos:'RW', ovr:76},
@@ -930,20 +940,20 @@ const SQUADS = [
     fato:'Cruzeiro atropelou o Racing por 4 a 0 no jogo de ida e administrou a derrota por 1 a 0 na volta para faturar o bicampeonato da Supercopa Libertadores, com Renato Gaúcho em grande fase.',
     jogadores:[
       {nome:'Paulo César', pos:'GK', ovr:86},
-      {nome:'Nonato', pos:'LB', ovr:80},
-      {nome:'Luizinho', pos:'CB', ovr:82},
-      {nome:'Célio Lúcio', pos:'CB', ovr:81},
-      {nome:'Arley Álvares', pos:'CB', ovr:76},
-      {nome:'Paulo Roberto', pos:'RB', ovr:82},
+      {nome:'Nonato', pos:'LB', ovr:84},
+      {nome:'Luizinho', pos:'CB', ovr:85},
+      {nome:'Célio Lúcio', pos:'CB', ovr:84, flex:['RB']},
+      {nome:'Arley Álvares', pos:'CB', ovr:81},
+      {nome:'Paulo Roberto', pos:'RB', ovr:85, flex:['CB']},
       {nome:'Douglas', pos:'DM', ovr:84},
-      {nome:'Ademir', pos:'DM', ovr:77},
-      {nome:'Luís Fernando', pos:'CM', ovr:85},
-      {nome:'Betinho', pos:'CM', ovr:81},
-      {nome:'Andrade', pos:'CM', ovr:77},
-      {nome:'Boiadeiro', pos:'AM', ovr:87},
-      {nome:'Macalé', pos:'LW', ovr:76},
+      {nome:'Ademir', pos:'DM', ovr:77, flex:['CM']},
+      {nome:'Luís Fernando', pos:'CM', ovr:87, flex:['AM']},
+      {nome:'Betinho', pos:'CM', ovr:84},
+      {nome:'Andrade', pos:'CM', ovr:82},
+      {nome:'Boiadeiro', pos:'AM', ovr:87, flex:['CM']},
+      {nome:'Macalé', pos:'LW', ovr:76, flex:['CM']},
       {nome:'Renato Gaúcho', pos:'RW', ovr:93},
-      {nome:'Roberto Gaúcho', pos:'ST', ovr:83},
+      {nome:'Roberto Gaúcho', pos:'ST', ovr:83, flex:['RW']},
     ]
   },
   {
@@ -952,13 +962,13 @@ const SQUADS = [
     fato:'Na fase de ouro que revelou Tostão e Wilson Piazza ao futebol mundial, o Cruzeiro bateu o Villa Nova por 1 a 0, gol de Rodrigues, e faturou o Campeonato Mineiro de 1968.',
     jogadores:[
       {nome:'Raul Plassmann', pos:'GK', ovr:88},
-      {nome:'Neco', pos:'LB', ovr:83},
-      {nome:'Darci Menezes', pos:'CB', ovr:84},
-      {nome:'Procópio', pos:'CB', ovr:81},
-      {nome:'Pedro Paulo', pos:'RB', ovr:85},
+      {nome:'Neco', pos:'LB', ovr:85},
+      {nome:'Darci Menezes', pos:'CB', ovr:86},
+      {nome:'Procópio', pos:'CB', ovr:84},
+      {nome:'Pedro Paulo', pos:'RB', ovr:87},
       {nome:'Wilson Piazza', pos:'DM', ovr:86},
-      {nome:'Zé Carlos', pos:'CM', ovr:84},
-      {nome:'Murilo', pos:'CM', ovr:81},
+      {nome:'Zé Carlos', pos:'CM', ovr:86},
+      {nome:'Murilo (1968)', pos:'CM', ovr:84},
       {nome:'Dirceu Lopes', pos:'AM', ovr:93},
       {nome:'Hilton Oliveira', pos:'LW', ovr:83},
       {nome:'Rodrigues', pos:'LW', ovr:82},
@@ -974,14 +984,14 @@ const SQUADS = [
     fato:'Depois de uma década sem título estadual oficial, o Cruzeiro superou o rival Atlético-MG na decisão (0 a 0 na ida e 2 a 0 na volta, gol de Careca) e voltou a ser campeão mineiro.',
     jogadores:[
       {nome:'Gomes', pos:'GK', ovr:85},
-      {nome:'Genílson', pos:'LB', ovr:79},
-      {nome:'Gilmar Francisco', pos:'CB', ovr:81},
-      {nome:'Vilmar', pos:'CB', ovr:78},
-      {nome:'Heraldo', pos:'CB', ovr:76},
-      {nome:'Balu', pos:'RB', ovr:80},
+      {nome:'Genílson', pos:'LB', ovr:83},
+      {nome:'Gilmar Francisco', pos:'CB', ovr:84},
+      {nome:'Vilmar', pos:'CB', ovr:82},
+      {nome:'Heraldo', pos:'CB', ovr:81},
+      {nome:'Balu', pos:'RB', ovr:84},
       {nome:'Douglas', pos:'DM', ovr:83},
-      {nome:'Ademir', pos:'CM', ovr:82},
-      {nome:'Eduardo', pos:'CM', ovr:78},
+      {nome:'Ademir', pos:'CM', ovr:85, flex:['DM']},
+      {nome:'Eduardo', pos:'CM', ovr:82, flex:['AM']},
       {nome:'Careca', pos:'AM', ovr:85},
       {nome:'Vanderlei Lima', pos:'RW', ovr:82},
       {nome:'Robson', pos:'ST', ovr:88},
@@ -998,17 +1008,17 @@ const SQUADS = [
       {nome:'Bosco', pos:'GK', ovr:80},
       {nome:'Jeferson', pos:'GK', ovr:75},
       {nome:'Sorín', pos:'LB', ovr:89},
-      {nome:'Luisão', pos:'CB', ovr:83},
-      {nome:'Cris', pos:'CB', ovr:82},
-      {nome:'Cléber Monteiro', pos:'CB', ovr:80},
-      {nome:'Maicon', pos:'RB', ovr:76},
+      {nome:'Luisão', pos:'CB', ovr:85},
+      {nome:'Cris', pos:'CB', ovr:85},
+      {nome:'Cléber Monteiro', pos:'CB', ovr:84},
+      {nome:'Maicon', pos:'RB', ovr:81},
       {nome:'Marcus Vinícius', pos:'DM', ovr:80},
-      {nome:'Ricardinho', pos:'CM', ovr:82},
-      {nome:'Jackson', pos:'CM', ovr:81},
-      {nome:'Sérgio Manoel', pos:'CM', ovr:78},
-      {nome:'Marcos Paulo', pos:'CM', ovr:77},
+      {nome:'Ricardinho', pos:'CM', ovr:85, flex:['AM']},
+      {nome:'Jackson', pos:'CM', ovr:84},
+      {nome:'Sérgio Manoel', pos:'CM', ovr:82},
+      {nome:'Marcos Paulo', pos:'CM', ovr:82},
       {nome:'Geovanni', pos:'AM', ovr:89},
-      {nome:'Jorge Wagner', pos:'AM', ovr:88},
+      {nome:'Jorge Wagner', pos:'AM', ovr:88, flex:['CM']},
       {nome:'Adriano Chuva', pos:'RW', ovr:76},
       {nome:'Oséas', pos:'ST', ovr:85},
       {nome:'Marcelo Ramos', pos:'ST', ovr:80},
@@ -1022,18 +1032,18 @@ const SQUADS = [
     jogadores:[
       {nome:'Jefferson', pos:'GK', ovr:83},
       {nome:'Sorín', pos:'LB', ovr:89},
-      {nome:'Luisão', pos:'CB', ovr:84},
-      {nome:'Cris', pos:'CB', ovr:83},
-      {nome:'Marcelo Batatais', pos:'CB', ovr:81},
-      {nome:'Maicon', pos:'RB', ovr:80},
-      {nome:'Ruy', pos:'RB', ovr:80},
+      {nome:'Luisão', pos:'CB', ovr:86},
+      {nome:'Cris', pos:'CB', ovr:85},
+      {nome:'Marcelo Batatais', pos:'CB', ovr:84},
+      {nome:'Maicon', pos:'RB', ovr:84},
+      {nome:'Ruy', pos:'RB', ovr:84},
       {nome:'Fernando Miguel', pos:'DM', ovr:80},
-      {nome:'Jorge Wagner', pos:'CM', ovr:87},
-      {nome:'Ricardinho', pos:'AM', ovr:90},
-      {nome:'Jussiê', pos:'AM', ovr:78},
+      {nome:'Jorge Wagner', pos:'CM', ovr:88, flex:['AM']},
+      {nome:'Ricardinho', pos:'AM', ovr:90, flex:['CM']},
+      {nome:'Jussiê', pos:'AM', ovr:78, flex:['LW']},
       {nome:'Vander', pos:'LW', ovr:81},
-      {nome:'Edílson', pos:'RW', ovr:93},
-      {nome:'Joãozinho', pos:'RW', ovr:76},
+      {nome:'Edílson', pos:'RW', ovr:93, flex:['RB']},
+      {nome:'Joãozinho', pos:'RW', ovr:76, flex:['LW']},
       {nome:'Fábio Júnior', pos:'ST', ovr:85},
       {nome:'Alessandro', pos:'ST', ovr:83},
       {nome:'Lúcio', pos:'ST', ovr:78},
@@ -1047,19 +1057,19 @@ const SQUADS = [
     jogadores:[
       {nome:'Fábio', pos:'GK', ovr:88},
       {nome:'Rafael', pos:'GK', ovr:75},
-      {nome:'Egídio', pos:'LB', ovr:79},
-      {nome:'Dodô', pos:'LB', ovr:78},
-      {nome:'Dedé', pos:'CB', ovr:87},
-      {nome:'Léo Renan', pos:'CB', ovr:80},
-      {nome:'Cacá', pos:'CB', ovr:77},
-      {nome:'Orejuela', pos:'RB', ovr:78},
-      {nome:'Edílson', pos:'RB', ovr:76},
+      {nome:'Egídio', pos:'LB', ovr:83},
+      {nome:'Dodô', pos:'LB', ovr:82},
+      {nome:'Dedé', pos:'CB', ovr:88},
+      {nome:'Léo Renan', pos:'CB', ovr:84},
+      {nome:'Cacá', pos:'CB', ovr:82},
+      {nome:'Orejuela', pos:'RB', ovr:82},
+      {nome:'Edílson', pos:'RB', ovr:81, flex:['RW']},
       {nome:'Lucas Romero', pos:'DM', ovr:81},
-      {nome:'Henrique', pos:'DM', ovr:79},
-      {nome:'Ariel Cabral', pos:'DM', ovr:77},
-      {nome:'Jadson', pos:'CM', ovr:75},
+      {nome:'Henrique', pos:'DM', ovr:79, flex:['CM']},
+      {nome:'Ariel Cabral', pos:'DM', ovr:77, flex:['CM']},
+      {nome:'Jadson', pos:'CM', ovr:80},
       {nome:'Rodriguinho', pos:'AM', ovr:84},
-      {nome:'Robinho', pos:'AM', ovr:82},
+      {nome:'Robinho', pos:'AM', ovr:82, flex:['LW']},
       {nome:'Thiago Neves', pos:'AM', ovr:80},
       {nome:'Marquinhos Gabriel', pos:'LW', ovr:80},
       {nome:'David', pos:'LW', ovr:77},
@@ -1126,19 +1136,15 @@ const FORMATIONS = {
   },
 };
 
-const ADJ = {
-  GK:[], LB:['CB'], RB:['CB'], CB:['LB','RB','DM'],
-  DM:['CM','CB'], LM:['LW','CM','LB'], CM:['DM','AM','LM','RM'], RM:['RW','CM','RB'],
-  AM:['CM','LW','RW'],
-  LW:['AM','ST','LM'], RW:['AM','ST','RM'], ST:['LW','RW']
-};
-
 const POS_ORDER = ['GK','LB','CB','RB','DM','LM','CM','RM','AM','LW','RW','ST'];
 
+// atk = multiplica sua própria chance de gol · def = multiplica a chance de gol do ADVERSÁRIO
+// (jogar ofensivo deixa você mais perigoso, mas também abre mais espaço atrás — só que sem
+// exagerar a ponto de virar um troca-troca de 6x5 toda partida)
 const STYLES = {
-  'Defensivo': {atk:0.80, def:0.65},
+  'Defensivo': {atk:0.82, def:0.72},
   'Equilibrado': {atk:1.00, def:1.00},
-  'Ofensivo': {atk:1.25, def:1.30},
+  'Ofensivo': {atk:1.15, def:1.08},
 };
 
 const MAX_REROLLS = 2;
@@ -1264,9 +1270,22 @@ function startBuild(){
   showScreen('screen-build');
 }
 
-function fitLevel(playerPos, slotCat){
-  if(playerPos===slotCat) return 'exact';
-  if((ADJ[slotCat]||[]).includes(playerPos)) return 'adjacent';
+// encaixe é por JOGADOR, não por posição genérica: só conta como "adjacente" se
+// aquele craque específico tem registro real de ter atuado nessa posição também
+// (ver campo flex de cada jogador — vem de aparições dele em elencos diferentes,
+// ou de pesquisa pontual quando é um caso bem documentado, tipo o Éverton Ribeiro
+// que também jogava de ponta)
+// ponta (LW/RW) e meia-lateral (LM/RM) não são craques diferentes, são a MESMA função em
+// profundidades diferentes de campo — por isso essa dupla continua valendo pra qualquer
+// jogador, e não só pra quem tem flex documentado (ninguém no banco tem LM/RM como posição
+// principal, então sem essa regra as vagas de LM/RM ficariam sem ninguém de verdade)
+const SAME_FUNCTION = {LW:'LM', LM:'LW', RW:'RM', RM:'RW'};
+
+function fitLevel(jogador, slotCat){
+  if(!jogador) return 'mismatch';
+  if(jogador.pos===slotCat) return 'exact';
+  if((jogador.flex||[]).includes(slotCat)) return 'adjacent';
+  if(SAME_FUNCTION[jogador.pos]===slotCat) return 'adjacent';
   return 'mismatch';
 }
 
@@ -1326,13 +1345,13 @@ function renderPitch(){
       let label = '';
       if(s.jogador){
         cls += ' filled';
-        const fit = fitLevel(s.jogador.pos, s.categoria);
+        const fit = fitLevel(s.jogador, s.categoria);
         if(fit==='adjacent') cls += ' adjacent';
         if(fit==='mismatch') cls += ' mismatch';
         if(selectedPlayer && selectedPlayer.moveFromIndex===i) cls += ' moving';
         label = `<small>${s.categoria}</small>${s.jogador.nome}${currentMode==='Clássico' ? `<span class="ovr-mini">${s.jogador.ovr}</span>`:''}<span class="yr-mini">${s.jogador.squadAno}</span>`;
       } else if(selectedPlayer){
-        const fit = fitLevel(selectedPlayer.jogador.pos, s.categoria);
+        const fit = fitLevel(selectedPlayer.jogador, s.categoria);
         if(fit==='exact'){ cls += ' unlock-exact'; label = `<small>${s.categoria}</small>✓ colocar aqui`; }
         else if(fit==='adjacent'){ cls += ' unlock-adjacent'; label = `<small>${s.categoria}</small>colocar aqui?`; }
         else { cls += ' locked'; label = `<small>${s.categoria}</small>🔒`; }
@@ -1378,7 +1397,7 @@ function onSlotClick(i){
     document.getElementById('lineup-helper').textContent = 'Sorteie um time e escolha um jogador da lista primeiro.';
     return;
   }
-  const fit = fitLevel(selectedPlayer.jogador.pos, slot.categoria);
+  const fit = fitLevel(selectedPlayer.jogador, slot.categoria);
   if(fit==='mismatch'){
     document.getElementById('lineup-helper').textContent = `${selectedPlayer.jogador.nome} não joga nessa posição.`;
     return;
@@ -1563,7 +1582,7 @@ function autoFill(){
         .filter(j=> !(s.categoria==='GK' && j.pos!=='GK') && !(j.pos==='GK' && s.categoria!=='GK'))
         .filter(j=> !usedNames.has(j.nome))
         .sort((a,b)=>{
-          const fa = fitLevel(a.pos,s.categoria), fb = fitLevel(b.pos,s.categoria);
+          const fa = fitLevel(a,s.categoria), fb = fitLevel(b,s.categoria);
           const rank = {exact:0, adjacent:1, mismatch:2};
           if(rank[fa]!==rank[fb]) return rank[fa]-rank[fb];
           return b.ovr - a.ovr;
@@ -1622,7 +1641,7 @@ function computeTeamRating(){
   if(!filled.length) return {rating:null, posScore:0, avgOvr:0, combinedFit:0};
   let fitSum = 0;
   filled.forEach(s=>{
-    const f = fitLevel(s.jogador.pos, s.categoria);
+    const f = fitLevel(s.jogador, s.categoria);
     fitSum += (f==='exact') ? 1.0 : (f==='adjacent' ? 0.6 : 0.25);
   });
   const posScore = fitSum/filled.length;
@@ -1633,8 +1652,7 @@ function computeTeamRating(){
 }
 
 // ovrHome/ovrAway = força dos times · userSide = 'home'|'away'|null · neutral = sem bônus de mando
-// usado para as partidas "de fundo" do grupo que não envolvem o usuário (não precisam de eventos minuto a minuto)
-function simpleMatch(ovrHome, ovrAway, userSide, neutral){
+function computeMatchProbs(ovrHome, ovrAway, userSide, neutral){
   let effHome = ovrHome + (neutral ? 0 : 3);
   let effAway = ovrAway;
   const adv = clampNum((effHome-effAway)/25, -1.4, 1.4);
@@ -1645,31 +1663,17 @@ function simpleMatch(ovrHome, ovrAway, userSide, neutral){
     if(userSide==='home'){ probHome = clampNum(probHome*sm.atk,0.03,0.65); probAway = clampNum(probAway*sm.def,0.03,0.65); }
     else { probAway = clampNum(probAway*sm.atk,0.03,0.65); probHome = clampNum(probHome*sm.def,0.03,0.65); }
   }
+  return {probHome, probAway};
+}
+
+// usado para as partidas "de fundo" do grupo que não envolvem o usuário — resolvida de uma vez
+// só, sem tela ao vivo, então não faz diferença o placar sair pronto aqui
+function simpleMatch(ovrHome, ovrAway, userSide, neutral){
+  const {probHome, probAway} = computeMatchProbs(ovrHome, ovrAway, userSide, neutral);
   let golsHome=0, golsAway=0;
   for(let i=0;i<8;i++){ if(Math.random()<probHome) golsHome++; if(Math.random()<probAway) golsAway++; }
   return {golsHome, golsAway};
 }
-
-// usado para a partida do usuário: mesma probabilidade, mas também gera os lances (minuto,
-// quem fez o gol e, quando é gol do time do usuário, quem deu a assistência)
-function simulateMatchEvents(ovrHome, ovrAway, userSide, neutral, homeLabel, awayLabel){
-  const {golsHome, golsAway} = simpleMatch(ovrHome, ovrAway, userSide, neutral);
-  const events = [];
-  for(let i=0;i<golsHome;i++){
-    const isUser = userSide==='home';
-    const scorer = isUser ? pickScorerFromLineup() : genericScorerText(homeLabel);
-    events.push({minute: randMinute(), side:'home', scorer, assist: isUser ? pickAssistFromLineup(scorer) : null});
-  }
-  for(let i=0;i<golsAway;i++){
-    const isUser = userSide==='away';
-    const scorer = isUser ? pickScorerFromLineup() : genericScorerText(awayLabel);
-    events.push({minute: randMinute(), side:'away', scorer, assist: isUser ? pickAssistFromLineup(scorer) : null});
-  }
-  events.sort((a,b)=>a.minute-b.minute);
-  return {golsHome, golsAway, events};
-}
-
-function randMinute(){ return 1 + Math.floor(Math.random()*90); }
 
 function pickScorerFromLineup(){
   const pool = slots.filter(s=>s.jogador).map(s=>({nome:s.jogador.nome, w: SCORER_WEIGHT[s.categoria]!==undefined ? SCORER_WEIGHT[s.categoria] : 1}));
@@ -1705,9 +1709,65 @@ function clubLabel(club){
 
 /* =========================================================
    TELA DE PARTIDA AO VIVO (minuto a minuto, 0-45 / 45-90)
+   O placar NÃO é sorteado de uma vez só no início — cada chance de gol só é resolvida
+   quando o relógio realmente chega naquele minuto, então ninguém (nem o próprio código)
+   sabe o resultado antes da hora. É isso que dá o suspense de "vai que sai gol agora".
    ========================================================= */
+const FLAVOR_LINES = [
+  'Chance perigosa, mas a bola sai por cima do gol.',
+  'Grande defesa evita o que seria gol.',
+  'Bola na trave! Que perigo.',
+  'Cartão amarelo interrompe o ritmo da partida.',
+  'Escanteio cobrado, mas a zaga afasta o perigo.',
+  'Falta perigosa na entrada da área, cobrança para fora.',
+  'Contra-ataque rápido, mas o último passe sai errado.',
+  'Bola tirada em cima da linha, quase gol!',
+  'Impedimento anula lance de perigo.',
+  'Chute de fora da área passa rente à trave.',
+];
+
+// espalha N "momentos" dentro de [startMin,endMin] em segmentos parecidos, pra não ter
+// chance de gol amontoada só numa parte do jogo
+function genCheckpoints(startMin, endMin, n){
+  const span = endMin - startMin + 1;
+  const seg = span / n;
+  const arr = [];
+  for(let i=0;i<n;i++){
+    const lo = startMin + Math.floor(i*seg);
+    const hi = startMin + Math.floor((i+1)*seg) - 1;
+    const mm = lo + Math.floor(Math.random()*Math.max(1, hi-lo+1));
+    arr.push(clampNum(mm, startMin, endMin));
+  }
+  return arr.sort((a,b)=>a-b);
+}
+
+function genFlavorMinutes(exclude, count){
+  const excludeSet = new Set(exclude);
+  const arr = [];
+  let guard = 0;
+  while(arr.length<count && guard++<300){
+    const mm = 1 + Math.floor(Math.random()*90);
+    if(!excludeSet.has(mm) && !arr.includes(mm)) arr.push(mm);
+  }
+  return arr.sort((a,b)=>a-b);
+}
+
+function buildGoalEvent(pm, side, minute){
+  const isUser = pm.userSide===side;
+  const clubLbl = side==='home' ? pm.homeLabel : pm.awayLabel;
+  const scorer = isUser ? pickScorerFromLineup() : genericScorerText(clubLbl);
+  const assist = isUser ? pickAssistFromLineup(scorer) : null;
+  return {minute, side, scorer, assist};
+}
+
 function playMatchView(opts){
-  pendingMatch = {...opts, minute:0, shownEvents:[], timer:null, finished:false};
+  const {probHome, probAway} = computeMatchProbs(opts.ovrHome, opts.ovrAway, opts.userSide, opts.neutral);
+  const checkpoints = genCheckpoints(3, 88, 8);
+  const flavorMinutes = genFlavorMinutes(checkpoints, 5);
+  pendingMatch = {
+    ...opts, probHome, probAway, checkpoints, flavorMinutes,
+    minute:0, golsHome:0, golsAway:0, shownEvents:[], timer:null, finished:false
+  };
   document.getElementById('mv-fase').textContent = opts.label;
   document.getElementById('mv-home').textContent = opts.homeLabel;
   document.getElementById('mv-away').textContent = opts.awayLabel;
@@ -1727,13 +1787,32 @@ function playMatchView(opts){
   }
 }
 
+// resolve tudo que pode acontecer NESTE minuto exato — chance de gol e/ou lance de emoção
+function resolveMinute(pm, minute){
+  while(pm.checkpoints.length && pm.checkpoints[0]===minute){
+    pm.checkpoints.shift();
+    if(Math.random()<pm.probHome){
+      pm.golsHome++;
+      addMatchEvent(buildGoalEvent(pm, 'home', minute));
+    }
+    if(Math.random()<pm.probAway){
+      pm.golsAway++;
+      addMatchEvent(buildGoalEvent(pm, 'away', minute));
+    }
+  }
+  while(pm.flavorMinutes.length && pm.flavorMinutes[0]===minute){
+    pm.flavorMinutes.shift();
+    addFlavorEvent(minute);
+  }
+}
+
 function tickMatchView(){
   const pm = pendingMatch;
-  if(!pm) return;
+  if(!pm || pm.finished) return;
   pm.minute++;
   document.getElementById('mv-clock').textContent = pm.minute + "'" + (pm.minute===45 ? ' · Intervalo' : '');
   document.getElementById('mv-bar').style.width = Math.min(100,(pm.minute/90)*100) + '%';
-  pm.events.filter(e=> e.minute===pm.minute).forEach(e=> addMatchEvent(e));
+  resolveMinute(pm, pm.minute);
   if(pm.minute>=90){
     clearInterval(pm.timer);
     pm.finished = true;
@@ -1744,9 +1823,7 @@ function tickMatchView(){
 function addMatchEvent(e){
   const pm = pendingMatch;
   pm.shownEvents.push(e);
-  let gh=0, ga=0;
-  pm.shownEvents.forEach(ev=>{ if(ev.side==='home') gh++; else ga++; });
-  document.getElementById('mv-score').textContent = `${gh} - ${ga}`;
+  document.getElementById('mv-score').textContent = `${pm.golsHome} - ${pm.golsAway}`;
   const wrap = document.getElementById('mv-events');
   const row = document.createElement('div');
   row.className = 'mv-event';
@@ -1755,12 +1832,21 @@ function addMatchEvent(e){
   wrap.prepend(row);
 }
 
+function addFlavorEvent(minute){
+  const text = FLAVOR_LINES[Math.floor(Math.random()*FLAVOR_LINES.length)];
+  const wrap = document.getElementById('mv-events');
+  const row = document.createElement('div');
+  row.className = 'mv-event flavor';
+  row.innerHTML = `<span class="mv-min">${minute}'</span><span>👀 ${text}</span>`;
+  wrap.prepend(row);
+}
+
 function finishMatchViewInstant(){
   const pm = pendingMatch;
+  for(let mm=1; mm<=90; mm++){ resolveMinute(pm, mm); }
   pm.minute = 90;
   document.getElementById('mv-clock').textContent = "90'";
   document.getElementById('mv-bar').style.width = '100%';
-  pm.events.forEach(e=> addMatchEvent(e));
   pm.finished = true;
   renderMatchViewActions(false);
 }
@@ -1769,7 +1855,7 @@ function skipMatchView(){
   const pm = pendingMatch;
   if(!pm) return;
   if(pm.timer) clearInterval(pm.timer);
-  pm.events.forEach(e=>{ if(!pm.shownEvents.includes(e)) addMatchEvent(e); });
+  for(let mm=pm.minute+1; mm<=90; mm++){ resolveMinute(pm, mm); }
   pm.minute = 90;
   document.getElementById('mv-clock').textContent = "90'";
   document.getElementById('mv-bar').style.width = '100%';
@@ -1789,7 +1875,12 @@ function renderMatchViewActions(inProgress){
     const cont = document.createElement('button');
     cont.className = 'btn';
     cont.textContent = '▶ Continuar';
-    cont.onclick = ()=>{ const cb = pendingMatch.onComplete; pendingMatch = null; cb(); };
+    cont.onclick = ()=>{
+      const cb = pendingMatch.onComplete;
+      const {golsHome, golsAway, shownEvents} = pendingMatch;
+      pendingMatch = null;
+      cb(golsHome, golsAway, shownEvents);
+    };
     wrap.appendChild(cont);
   }
 }
@@ -2118,12 +2209,12 @@ function playNextGroupRound(){
   const home = clubById(homeId), away = clubById(awayId);
   const userSide = homeId==='you' ? 'home' : 'away';
   const homeLabel = clubLabel(home), awayLabel = clubLabel(away);
-  const {golsHome, golsAway, events} = simulateMatchEvents(home.ovr, away.ovr, userSide, false, homeLabel, awayLabel);
 
   playMatchView({
     label: `Fase de Grupos · Rodada ${g.roundIndex+1}/6`,
-    homeLabel, awayLabel, events,
-    onComplete: ()=>{
+    homeLabel, awayLabel,
+    ovrHome: home.ovr, ovrAway: away.ovr, userSide, neutral:false,
+    onComplete: (golsHome, golsAway, events)=>{
       updateTable(homeId, awayId, golsHome, golsAway);
       campaign.matchLog.push({fase:`Grupos · R${g.roundIndex+1}`, mandante:homeLabel, visitante:awayLabel, golsMandante:golsHome, golsVisitante:golsAway, destaque:true});
       recordUserMatchStats(events, userSide);
@@ -2173,12 +2264,12 @@ function playKnockoutLeg(roundName){
   const awayOvr = userIsHome ? K.opponent.ovr : campaign.teamRating;
   const homeLabel = userIsHome ? 'Cruzeiro dos Sonhos' : clubLabel(K.opponent);
   const awayLabel = userIsHome ? clubLabel(K.opponent) : 'Cruzeiro dos Sonhos';
-  const {golsHome, golsAway, events} = simulateMatchEvents(homeOvr, awayOvr, userIsHome?'home':'away', false, homeLabel, awayLabel);
 
   playMatchView({
     label: `${STAGE_LABEL[roundName]} · ${isLeg1?'Jogo de Ida':'Jogo de Volta'}`,
-    homeLabel, awayLabel, events,
-    onComplete: ()=>{
+    homeLabel, awayLabel,
+    ovrHome: homeOvr, ovrAway: awayOvr, userSide: userIsHome?'home':'away', neutral:false,
+    onComplete: (golsHome, golsAway, events)=>{
       const userGols = userIsHome ? golsHome : golsAway;
       const oppGols = userIsHome ? golsAway : golsHome;
       const legResult = {golsHome,golsAway,userIsHome,userGols,oppGols};
@@ -2233,12 +2324,12 @@ function finishKnockoutRound(roundName, K){
 function playFinal(){
   const F = campaign.knockout.final;
   const homeLabel = 'Cruzeiro dos Sonhos', awayLabel = clubLabel(F.opponent);
-  const {golsHome, golsAway, events} = simulateMatchEvents(campaign.teamRating, F.opponent.ovr, 'home', true, homeLabel, awayLabel);
 
   playMatchView({
     label: 'Final · Jogo Único em Campo Neutro',
-    homeLabel, awayLabel, events,
-    onComplete: ()=>{
+    homeLabel, awayLabel,
+    ovrHome: campaign.teamRating, ovrAway: F.opponent.ovr, userSide:'home', neutral:true,
+    onComplete: (golsHome, golsAway, events)=>{
       let userGols = golsHome, oppGols = golsAway;
       F.pensScore = null;
       campaign.matchLog.push({fase:'Final', mandante:homeLabel, visitante:awayLabel, golsMandante:userGols, golsVisitante:oppGols, destaque:true});
